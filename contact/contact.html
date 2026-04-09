@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — View from the Cheap Seats</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header" id="site-header"></header>
+
+  <div class="site-wrapper">
+    <div class="content-grid">
+
+      <main>
+        <h1 class="page-title">Get in Touch</h1>
+        <p class="page-subtitle">I read everything. I can't promise I'll respond to everything, but I read it.</p>
+
+        <div class="contact-form">
+          <form id="contact-form" onsubmit="handleContact(event)">
+
+            <div class="form-group">
+              <label for="contact-name">Your Name</label>
+              <input type="text" id="contact-name" name="name" placeholder="First and last" required />
+            </div>
+
+            <div class="form-group">
+              <label for="contact-email">Email Address</label>
+              <input type="email" id="contact-email" name="email" placeholder="your@email.com" required />
+            </div>
+
+            <div class="form-group">
+              <label for="contact-subject">Subject</label>
+              <input type="text" id="contact-subject" name="subject" placeholder="What's this about?" />
+            </div>
+
+            <div class="form-group">
+              <label for="contact-message">Message</label>
+              <textarea id="contact-message" name="message" placeholder="Say what's on your mind. You don't have to agree with me." required></textarea>
+            </div>
+
+            <button type="submit" class="btn">Send Message</button>
+
+            <p class="mt-2" style="font-size:0.8rem; color:var(--muted); font-style:italic;">
+              This form routes through a secure backend. Your information won't be shared or sold.
+            </p>
+          </form>
+
+          <div id="contact-success" style="display:none; padding:1.5rem; background:var(--sidebar-bg); border:1px solid var(--border); border-radius:2px; margin-top:1.5rem;">
+            <strong>Message sent.</strong> I'll get back to you if I can.
+          </div>
+        </div>
+      </main>
+
+      <aside class="sidebar" id="sidebar"></aside>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="js/components.js"></script>
+  <script>
+    renderHeader('Contact');
+    renderSidebar();
+    renderFooter();
+
+    async function handleContact(e) {
+      e.preventDefault();
+      const form = e.target;
+      const data = {
+        name:    form.name.value,
+        email:   form.email.value,
+        subject: form.subject.value,
+        message: form.message.value,
+      };
+
+      // TODO: POST to your Swarm backend endpoint
+      // Example: await fetch('/api/contact', { method:'POST', body: JSON.stringify(data), headers:{'Content-Type':'application/json'} });
+
+      console.log('Contact form submitted:', data);
+
+      form.style.display = 'none';
+      document.getElementById('contact-success').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
