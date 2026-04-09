@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- UPDATE THESE FOR EACH POST -->
+  <title>This Is What Bad Faith Looks Like — View from the Cheap Seats</title>
+  <meta name="description" content="When the facts are clear and someone tells you otherwise anyway, that's not a different perspective. That's a lie with a microphone." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header" id="site-header"></header>
+
+  <div class="site-wrapper">
+    <div class="content-grid">
+
+      <main>
+        <article class="post-card">
+
+          <div class="post-meta">
+            <!-- UPDATE: date and tag for each post -->
+            <span class="post-date">April 9, 2026</span>
+            <span class="post-tag">Political Analysis</span>
+          </div>
+
+          <!-- UPDATE: post title -->
+          <h1 class="post-title">This Is What Bad Faith Looks Like</h1>
+
+          <!-- Audio player — UPDATE slug to match post filename (without .html) -->
+          <div class="audio-player">
+            <button class="audio-btn" onclick="handleAudioPlay('this-is-what-bad-faith-looks-like', this)" aria-label="Listen to this post">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="white"/></svg>
+            </button>
+            <span class="audio-label">Listen to this post · read by Jim</span>
+          </div>
+
+          <!-- POST BODY: replace everything between these comments -->
+          <!-- ===================== POST CONTENT START ===================== -->
+          <div class="post-body">
+
+            <p>Your post content goes here. This is the actual article, fully written out. Use standard HTML for formatting.</p>
+
+            <p>You can use paragraphs, headers, blockquotes, and embedded media. Keep the writing clean and let the argument carry the weight.</p>
+
+            <blockquote>
+              If you want to make a pull quote stand out, put it in a blockquote. It'll get the red left border treatment.
+            </blockquote>
+
+            <p>Add as many paragraphs as you need. There's no word limit, but I'd aim for 400–800 words as a sweet spot for political analysis — enough to make the argument properly, not so long it becomes a chore.</p>
+
+            <!-- Embed video (optional) -->
+            <!--
+            <div style="margin: 1.5rem 0; aspect-ratio: 16/9;">
+              <iframe width="100%" height="100%"
+                src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
+                frameborder="0" allowfullscreen style="display:block;"></iframe>
+            </div>
+            -->
+
+          </div>
+          <!-- ===================== POST CONTENT END ===================== -->
+
+          <!-- AI Review note (optional — include on posts that went through Swarm review) -->
+          <div class="ai-badge mt-3">
+            <span class="ai-icon">🤖</span>
+            <span>This post was reviewed by the Swarm AI panel before publishing. The arguments were stress-tested across multiple AI systems for logical consistency and blind spots. All conclusions are Jim's.</span>
+          </div>
+
+          <!-- Comments section -->
+          <div class="comments-section">
+            <h3>Join the conversation</h3>
+            <p class="comments-note">You don't have to agree with me. You just have to be civil. I read everything.</p>
+
+            <div class="comment-form">
+              <textarea placeholder="Your thoughts..."></textarea>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                <input type="text" placeholder="Your name" />
+                <input type="email" placeholder="Email (not published)" />
+              </div>
+              <button class="btn" onclick="submitComment(this)">Post Comment</button>
+            </div>
+
+            <!-- Existing comments will render here -->
+            <div id="comments-list" style="margin-top:2rem;"></div>
+          </div>
+
+        </article>
+
+        <!-- Post navigation -->
+        <div style="display:flex; justify-content:space-between; padding: 1rem 0; font-size:0.85rem;">
+          <a href="index.html" style="color:var(--muted);">← Back to latest post</a>
+          <a href="archive.html" style="color:var(--muted);">All posts →</a>
+        </div>
+
+      </main>
+
+      <aside class="sidebar" id="sidebar"></aside>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="js/components.js"></script>
+  <script>
+    renderHeader('');
+    renderSidebar();
+    renderFooter();
+
+    function submitComment(btn) {
+      const form = btn.closest('.comment-form');
+      const text = form.querySelector('textarea').value.trim();
+      const name = form.querySelector('input[type="text"]').value.trim();
+      if (!text || !name) { alert('Please enter your name and a comment.'); return; }
+
+      // TODO: POST to backend for moderation / storage
+      const list = document.getElementById('comments-list');
+      const div = document.createElement('div');
+      div.style.cssText = 'padding:1rem 0; border-top:1px solid var(--border);';
+      div.innerHTML = `<strong style="font-size:0.9rem;">${name}</strong>
+        <span style="font-size:0.75rem; color:var(--muted); margin-left:0.5rem;">just now</span>
+        <p style="margin-top:0.4rem; font-size:0.95rem;">${text}</p>`;
+      list.prepend(div);
+
+      form.querySelector('textarea').value = '';
+      form.querySelector('input[type="text"]').value = '';
+      form.querySelector('input[type="email"]').value = '';
+    }
+  </script>
+</body>
+</html>
