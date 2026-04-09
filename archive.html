@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Posts — View from the Cheap Seats</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header" id="site-header"></header>
+
+  <div class="site-wrapper">
+    <div class="content-grid">
+
+      <main>
+        <h1 class="page-title">All Posts</h1>
+        <p class="page-subtitle">Everything I've written, newest first.</p>
+
+        <ul class="archive-list" id="archive-list">
+
+          <!-- Add new posts here as they're published.
+               Copy the <li> block below for each new post. -->
+
+          <li class="archive-item">
+            <span class="archive-date">Apr 9, 2026</span>
+            <div>
+              <div class="archive-title">
+                <a href="post-template.html">This Is What Bad Faith Looks Like</a>
+              </div>
+              <div class="archive-excerpt">When the facts are clear and someone tells you otherwise anyway, that's not a different perspective. That's a lie with a microphone.</div>
+            </div>
+          </li>
+
+          <!-- More posts will appear here -->
+
+        </ul>
+      </main>
+
+      <aside class="sidebar" id="sidebar"></aside>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="js/components.js"></script>
+  <script>
+    renderHeader('All Posts');
+    renderSidebar();
+    renderFooter();
+  </script>
+</body>
+</html>
