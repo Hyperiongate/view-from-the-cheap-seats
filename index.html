@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>View from the Cheap Seats — James Dillingham</title>
+  <meta name="description" content="Political analysis and honest takes from James Dillingham. Not for profit. Just my view from the back of the arena." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header" id="site-header"></header>
+
+  <!-- HERO BANNER -->
+  <!-- Replace hero-placeholder.jpg with your Artemis 2 Earth/Moon image -->
+  <div class="hero">
+    <img src="assets/hero.jpg" alt="Earth rising near the Moon, seen from deep space — Artemis mission" />
+    <div class="hero-overlay"></div>
+    <div class="hero-text">
+      <h2>"The view is better from up here. You can see everything — including how small it all is."</h2>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="site-wrapper">
+    <div class="content-grid">
+
+      <!-- LATEST POST -->
+      <main>
+
+        <div class="post-card">
+          <div class="post-meta">
+            <span class="post-date">April 9, 2026</span>
+            <span class="post-tag">Political Analysis</span>
+          </div>
+
+          <h1 class="post-title">
+            <a href="post-template.html">This Is What Bad Faith Looks Like</a>
+          </h1>
+
+          <!-- Audio player -->
+          <div class="audio-player">
+            <button class="audio-btn" onclick="handleAudioPlay('this-is-what-bad-faith-looks-like', this)" aria-label="Listen to this post">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="white"/></svg>
+            </button>
+            <span class="audio-label">Listen to this post · read by Jim</span>
+          </div>
+
+          <div class="post-body">
+            <p>This is your first post. Replace this placeholder text with your actual writing. The title above, the audio player, and the layout are all set up and ready to go.</p>
+
+            <p>When you post, you can include any HTML here — paragraphs, pull quotes, embedded video, images. Keep it clean, keep it honest, and let the content do the talking.</p>
+
+            <p>The audio player above will check for a cached MP3 first. If none exists, the first visitor who clicks play will trigger generation via your ElevenLabs voice clone. Every visitor after that gets the cached file.</p>
+          </div>
+
+          <!-- Embed video (optional — uncomment when needed) -->
+          <!--
+          <div class="post-video" style="margin: 1.5rem 0; aspect-ratio: 16/9;">
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/VIDEO_ID"
+              frameborder="0" allowfullscreen style="display:block;"></iframe>
+          </div>
+          -->
+
+          <a href="post-template.html" class="read-more">Read the full post →</a>
+
+          <!-- Comments -->
+          <div class="comments-section">
+            <h3>Join the conversation</h3>
+            <p class="comments-note">You don't have to agree with me. You just have to be civil. I'm genuinely open to being convinced otherwise.</p>
+
+            <div class="comment-form">
+              <textarea placeholder="Your thoughts..."></textarea>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                <input type="text" placeholder="Your name" />
+                <input type="email" placeholder="Email (not published)" />
+              </div>
+              <button class="btn">Post Comment</button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+
+      <!-- SIDEBAR -->
+      <aside class="sidebar" id="sidebar"></aside>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="js/components.js"></script>
+  <script>
+    renderHeader('Home');
+    renderSidebar();
+    renderFooter();
+  </script>
+</body>
+</html>
