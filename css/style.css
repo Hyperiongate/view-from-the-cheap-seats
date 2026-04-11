@@ -14,7 +14,7 @@
   --accent-dark: #c0392b;
   --border:      #2a2a3a;
   --sidebar-bg:  #13131f;
-  --card-bg:     #16162a;
+  --card-bg:     #ffffff;
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body:    'Source Serif 4', Georgia, serif;
   --font-mono:    'JetBrains Mono', monospace;
@@ -212,7 +212,7 @@ img { max-width: 100%; height: auto; display: block; }
 .post-title a { color: var(--text); text-decoration: none; }
 .post-title a:hover { color: var(--accent); }
 
-.post-body { font-size: 1rem; line-height: 1.8; color: #2a2a2a; }
+.post-body { font-size: 1rem; line-height: 1.8; color: #1a1a1a; }
 .post-body p { margin-bottom: 1.25rem; }
 .post-body h2 { font-family: var(--font-display); font-size: 1.4rem; margin: 2rem 0 0.75rem; }
 .post-body h3 { font-family: var(--font-display); font-size: 1.15rem; margin: 1.5rem 0 0.5rem; }
