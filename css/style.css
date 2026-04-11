@@ -8,10 +8,10 @@
 /* --- Variables --- */
 :root {
   --bg:          #0d0d1a;
-  --text:        #e8e6e0;
-  --muted:       #333333;
-  --accent:      #e05c4a;
-  --accent-dark: #c0392b;
+  --text:        #1a1a1a;
+  --muted:       #444444;
+  --accent:      #c0392b;
+  --accent-dark: #96281b;
   --border:      #e0dbd2;
   --sidebar-bg:  #ffffff;
   --card-bg:     #ffffff;
