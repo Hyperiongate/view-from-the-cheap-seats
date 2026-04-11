@@ -92,6 +92,70 @@ function handleSubscribe(e) {
   // TODO: wire to your email list backend / Swarm
 }
 
+// ----- Comments -----
+const COMMENTS_API = 'https://jamesdillingham-comments.onrender.com';
+
+async function submitComment(btn) {
+  const form = btn.closest('.comment-form');
+  const body = form.querySelector('textarea').value.trim();
+  const name = form.querySelector('input[type="text"]').value.trim();
+  const email = form.querySelector('input[type="email"]').value.trim();
+
+  if (!body || !name) {
+    alert('Please enter your name and a comment.');
+    return;
+  }
+
+  // Get post slug from URL
+  const slug = window.location.pathname.replace(/\//g, '').replace('.html', '') || 'home';
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
+
+  try {
+    const res = await fetch(`${COMMENTS_API}/comments`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ post_slug: slug, name, email, body })
+    });
+    const data = await res.json();
+    form.querySelector('textarea').value = '';
+    form.querySelector('input[type="text"]').value = '';
+    form.querySelector('input[type="email"]').value = '';
+    btn.textContent = 'Comment Submitted';
+    const msg = document.createElement('p');
+    msg.style.cssText = 'color:#c0392b; font-style:italic; margin-top:0.75rem; font-size:0.85rem;';
+    msg.textContent = data.message || 'Your comment has been submitted for review. Thanks!';
+    form.appendChild(msg);
+  } catch (err) {
+    alert('Something went wrong. Please try again.');
+    btn.disabled = false;
+    btn.textContent = 'Post Comment';
+  }
+}
+
+async function loadComments(postSlug) {
+  const list = document.getElementById('comments-list');
+  if (!list) return;
+  try {
+    const res = await fetch(`${COMMENTS_API}/comments/${postSlug}`);
+    const data = await res.json();
+    if (data.comments.length === 0) {
+      list.innerHTML = '<p style="font-size:0.85rem; color:var(--muted); font-style:italic;">No comments yet. Be the first.</p>';
+      return;
+    }
+    list.innerHTML = data.comments.map(c => `
+      <div style="padding:1rem 0; border-top:1px solid var(--border);">
+        <strong style="font-size:0.9rem;">${c.name}</strong>
+        <span style="font-size:0.75rem; color:var(--muted); margin-left:0.5rem;">${new Date(c.created_at).toLocaleDateString()}</span>
+        <p style="margin-top:0.4rem; font-size:0.95rem;">${c.body}</p>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error('Could not load comments:', err);
+  }
+}
+
 // ----- Audio player logic -----
 // On first click: fetch from ElevenLabs API if no cached file,
 // then play and store. On subsequent clicks: play cached audio.
