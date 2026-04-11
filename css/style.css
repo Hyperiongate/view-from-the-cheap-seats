@@ -12,8 +12,8 @@
   --muted:       #9a9890;
   --accent:      #e05c4a;
   --accent-dark: #c0392b;
-  --border:      #2a2a3a;
-  --sidebar-bg:  #13131f;
+  --border:      #e0dbd2;
+  --sidebar-bg:  #ffffff;
   --card-bg:     #ffffff;
   --font-display: 'Playfair Display', Georgia, serif;
   --font-body:    'Source Serif 4', Georgia, serif;
@@ -363,7 +363,7 @@ audio { width: 100%; height: 32px; }
   letter-spacing: -0.01em;
 }
 
-.sidebar-widget p { color: var(--muted); font-size: 0.85rem; margin-bottom: 0.75rem; line-height: 1.6; }
+.sidebar-widget p { color: #1a1a1a; font-size: 0.85rem; margin-bottom: 0.75rem; line-height: 1.6; }
 
 .sidebar-widget input[type="email"] {
   width: 100%;
@@ -386,7 +386,7 @@ audio { width: 100%; height: 32px; }
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text);
+  color: #1a1a1a;
   font-size: 0.85rem;
   padding: 0.4rem 0;
   border-bottom: 1px solid var(--border);
