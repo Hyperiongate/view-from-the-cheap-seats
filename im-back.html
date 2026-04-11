@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- UPDATE THESE FOR EACH POST -->
+  <title>I'm Back — View from the Cheap Seats</title>
+  <meta name="description" content="I'm mad as hell and I'm not going to take it anymore. A return to the soapbox, a long list of damage, and an observation about ducks." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header" id="site-header"></header>
+
+  <div class="site-wrapper">
+    <div class="content-grid">
+
+      <main>
+        <article class="post-card">
+
+          <div class="post-meta">
+            <!-- UPDATE: date and tag for each post -->
+            <span class="post-date">April 11, 2026</span>
+            <span class="post-tag">Political Analysis</span>
+          </div>
+
+          <!-- UPDATE: post title -->
+          <h1 class="post-title">I'm Back</h1>
+
+          <!-- Audio player — UPDATE slug to match post filename (without .html) -->
+          <div class="audio-player">
+            <button class="audio-btn" onclick="handleAudioPlay('im-back', this)" aria-label="Listen to this post">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="white"/></svg>
+            </button>
+            <span class="audio-label">Listen to this post · read by Jim</span>
+          </div>
+
+          <!-- POST BODY: replace everything between these comments -->
+         <!-- ===================== POST CONTENT START ===================== -->
+          <div class="post-body">
+
+            <p>I'm back. At least I think I am.</p>
+
+            <p>It's time for me to once again take up my position on my digital soapbox and scream: <em>"I'm mad as hell and I'm not going to take it anymore!"</em></p>
+
+            <p>Did you hear that? Felt good.</p>
+
+            <p>My intent is to pick up where I left off — complaining about the state of things, politics in particular. I want to get after the truth of things and, more importantly, point out the motivation behind the actions of others. I'm not here to tell you what the answers are. I'm here to call out what's demonstrably wrong — and to ask why.</p>
+
+            <p>I quit blogging for a while because everything seemed to be about Trump. Today, nothing has changed. Every day it seems Trump wakes up and asks himself, <em>"What is the most harm I can do to the world today?"</em></p>
+
+            <p>It's never ending.</p>
+
+            <p>The joint U.S.-Israeli war on Iran that began in late February — a war that closed the Strait of Hormuz, triggered a global energy crisis, and left Trump publicly threatening to bomb Iranian power plants and bridges, actions that legal experts across the political spectrum called potential war crimes. The dismantling of the United States Forest Service. Threats to eradicate Iran entirely — not just its military, but its civilization — as a negotiating tactic. A cabinet filled with loyalists who have no relevant qualifications. The use of ICE as a personal enforcement arm. The imposition of tariffs based on economic beliefs that are refuted in the first week of any Econ 101 course — tariffs are a tax paid by American importers and passed to American consumers, full stop. The demolition of the East Wing. Plans to build a monument to himself on the National Mall. His face on paper currency. The systematic squashing of a free press. The grifting that has enriched him by billions of dollars while in office. The pardoning of the January 6th rioters. A proposed $1.5 trillion military budget paired with cuts to Medicare and Social Security. A "big beautiful bill" that enriched the wealthiest Americans while stripping healthcare from those who needed it most. The military invasion of Venezuela to seize its sitting president — an act that drew condemnation from international law scholars regardless of what one thinks of Maduro — while simultaneously pardoning one of the largest drug traffickers in modern history. The withholding of federal funding from states that didn't vote for him. The alienation of allies we've maintained for more than 70 years. Offering economic incentives to Hungary in exchange for keeping its authoritarian leader in power. The cancellation of every meaningful piece of climate legislation. The steady driving of trade partners toward China.</p>
+
+            <p>This is a small list.</p>
+
+            <p>I want to be clear about what follows: it is observation, not fact. I have no proof. But I think it's worth saying out loud.</p>
+
+            <p>If Donald Trump were secretly working for Vladimir Putin, he would behave exactly as he is behaving. Every action on that list above either weakens the United States, destabilizes its allies, or benefits Russia. Every single one. I don't know what Putin has on him. But whatever it is, it appears to be enough to make Trump choose to bring down the institutions of this country rather than have it come to light. I'm not claiming conspiracy. I'm noting a pattern. If it walks like a duck.</p>
+
+            <blockquote>To be fair to critics who will say "okay, so what's your solution?" — that's not what this blog is. I'm a guy in the cheap seats, not a policymaker. What I can do is point at the field and say: that play was wrong, that call was corrupt, and that player is cheating. That's the job here.</blockquote>
+
+            <p>One more thing. I want this site to eventually be as high-tech as I can make it. I write each post and then submit it to an AI panel for fact-checking and stress-testing before it goes up. You'll find a link in the sidebar to a tool I built that uses AI to fact-check news articles and transcripts. I spend at least half my working time with AI now — I see the way it's changing the world, and I have no intention of being left on the sidelines.</p>
+
+            <p>Expect more from me on that topic too.</p>
+
+          </div>
+          <!-- ===================== POST CONTENT END ===================== -->
+
+          <!-- AI Review note (optional — include on posts that went through Swarm review) -->
+          <div class="ai-badge mt-3">
+            <span class="ai-icon">🤖</span>
+            <span>This post was reviewed by the Swarm AI panel before publishing. The arguments were stress-tested across multiple AI systems for logical consistency and blind spots. All conclusions are Jim's.</span>
+          </div>
+
+          <!-- Comments section -->
+          <div class="comments-section">
+            <h3>Join the conversation</h3>
+            <p class="comments-note">You don't have to agree with me. You just have to be civil. I read everything.</p>
+
+            <div class="comment-form">
+              <textarea placeholder="Your thoughts..."></textarea>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
+                <input type="text" placeholder="Your name" />
+                <input type="email" placeholder="Email (not published)" />
+              </div>
+              <button class="btn" onclick="submitComment(this)">Post Comment</button>
+            </div>
+
+            <!-- Existing comments will render here -->
+            <div id="comments-list" style="margin-top:2rem;"></div>
+          </div>
+
+        </article>
+
+        <!-- Post navigation -->
+        <div style="display:flex; justify-content:space-between; padding: 1rem 0; font-size:0.85rem;">
+          <a href="index.html" style="color:var(--muted);">← Back to latest post</a>
+          <a href="archive.html" style="color:var(--muted);">All posts →</a>
+        </div>
+
+      </main>
+
+      <aside class="sidebar" id="sidebar"></aside>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="js/components.js"></script>
+  <script>
+    renderHeader('');
+    renderSidebar();
+    renderFooter();
+
+    function submitComment(btn) {
+      const form = btn.closest('.comment-form');
+      const text = form.querySelector('textarea').value.trim();
+      const name = form.querySelector('input[type="text"]').value.trim();
+      if (!text || !name) { alert('Please enter your name and a comment.'); return; }
+
+      // TODO: POST to backend for moderation / storage
+      const list = document.getElementById('comments-list');
+      const div = document.createElement('div');
+      div.style.cssText = 'padding:1rem 0; border-top:1px solid var(--border);';
+      div.innerHTML = `<strong style="font-size:0.9rem;">${name}</strong>
+        <span style="font-size:0.75rem; color:var(--muted); margin-left:0.5rem;">just now</span>
+        <p style="margin-top:0.4rem; font-size:0.95rem;">${text}</p>`;
+      list.prepend(div);
+
+      form.querySelector('textarea').value = '';
+      form.querySelector('input[type="text"]').value = '';
+      form.querySelector('input[type="email"]').value = '';
+    }
+  </script>
+</body>
+</html>
