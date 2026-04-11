@@ -116,25 +116,7 @@
     loadComments('im-back');
   
 
-    function submitComment(btn) {
-      const form = btn.closest('.comment-form');
-      const text = form.querySelector('textarea').value.trim();
-      const name = form.querySelector('input[type="text"]').value.trim();
-      if (!text || !name) { alert('Please enter your name and a comment.'); return; }
-
-      // TODO: POST to backend for moderation / storage
-      const list = document.getElementById('comments-list');
-      const div = document.createElement('div');
-      div.style.cssText = 'padding:1rem 0; border-top:1px solid var(--border);';
-      div.innerHTML = `<strong style="font-size:0.9rem;">${name}</strong>
-        <span style="font-size:0.75rem; color:var(--muted); margin-left:0.5rem;">just now</span>
-        <p style="margin-top:0.4rem; font-size:0.95rem;">${text}</p>`;
-      list.prepend(div);
-
-      form.querySelector('textarea').value = '';
-      form.querySelector('input[type="text"]').value = '';
-      form.querySelector('input[type="email"]').value = '';
-    }
+    
   </script>
 </body>
 </html>
