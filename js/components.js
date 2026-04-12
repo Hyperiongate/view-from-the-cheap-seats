@@ -227,3 +227,9 @@ async function checkFileExists(url) {
     return res.ok;
   } catch { return false; }
 }
+// ----- Event delegation for comment buttons -----
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.classList.contains('btn') && e.target.closest('.comment-form')) {
+    submitComment(e.target);
+  }
+});
