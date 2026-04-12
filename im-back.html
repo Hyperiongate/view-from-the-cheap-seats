@@ -114,8 +114,9 @@
     renderSidebar();
     renderFooter();
     loadComments('im-back');
-    document.querySelector('.comment-form .btn').addEventListener('click', function() {
-      submitComment(this);
+    window.addEventListener('DOMContentLoaded', function() {
+      var btn = document.querySelector('.comment-form .btn');
+      if (btn) btn.addEventListener('click', function() { submitComment(this); });
     });
 
     
