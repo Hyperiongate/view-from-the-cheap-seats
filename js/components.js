@@ -101,6 +101,9 @@ async function submitComment(btn) {
   const name = form.querySelector('input[type="text"]').value.trim();
   const email = form.querySelector('input[type="email"]').value.trim();
 
+const honeypot = form.querySelector('input[name="_gotcha"]');
+  if (honeypot && honeypot.value) return;
+
   if (!body || !name) {
     alert('Please enter your name and a comment.');
     return;
