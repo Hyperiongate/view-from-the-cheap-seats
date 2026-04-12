@@ -137,6 +137,7 @@ async function submitComment(btn) {
     form.querySelector('input[type="text"]').value = '';
     form.querySelector('input[type="email"]').value = '';
     btn.textContent = 'Comment Submitted';
+    btn.disabled = false;
     const msg = document.createElement('p');
     msg.className = 'comment-success';
     msg.textContent = data.message || 'Your comment has been submitted for review. Thanks!';
