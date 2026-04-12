@@ -114,10 +114,12 @@
     renderSidebar();
     renderFooter();
     loadComments('im-back');
-    window.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
       var btn = document.querySelector('.comment-form .btn');
-      if (btn) btn.addEventListener('click', function() { submitComment(this); });
-    });
+      if (btn) {
+        btn.addEventListener('click', function() { submitComment(this); });
+      }
+    }, 500);
 
     
   </script>
