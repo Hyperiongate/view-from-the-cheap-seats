@@ -106,19 +106,33 @@ async function submitComment(btn) {
     return;
   }
 
-  // Get post slug from URL
   const slug = window.location.pathname.replace(/\//g, '').replace('.html', '') || 'home';
 
   btn.disabled = true;
   btn.textContent = 'Submitting...';
 
   try {
+    // Step 1: Save to database
     const res = await fetch(`${COMMENTS_API}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ post_slug: slug, name, email, body })
     });
     const data = await res.json();
+
+    // Step 2: Notify Jim via Formspree from browser
+    await fetch('https://formspree.io/f/xzdypeyp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        email: email || 'not provided',
+        post: slug,
+        comment: body,
+        _subject: `New comment on '${slug}' — View from the Cheap Seats`
+      })
+    });
+
     form.querySelector('textarea').value = '';
     form.querySelector('input[type="text"]').value = '';
     form.querySelector('input[type="email"]').value = '';
