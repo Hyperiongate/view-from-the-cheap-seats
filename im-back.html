@@ -85,7 +85,7 @@
                 <input type="text" placeholder="Your name" />
                 <input type="email" placeholder="Email (not published)" />
               </div>
-              <button class="btn" onclick="submitComment(this)">Post Comment</button>
+              <button class="btn">Post Comment</button>
             </div>
 
             <!-- Existing comments will render here -->
@@ -114,7 +114,9 @@
     renderSidebar();
     renderFooter();
     loadComments('im-back');
-    console.log('components loaded, submitComment:', typeof submitComment);
+    document.querySelector('.comment-form .btn').addEventListener('click', function() {
+      submitComment(this);
+    });
 
     
   </script>
