@@ -33,11 +33,8 @@ function renderSidebar() {
     <!-- Subscribe widget -->
     <div class="sidebar-widget">
       <h4>Get New Posts</h4>
-      <p>Drop your email and I'll let you know when I post something new. No spam, no newsletter fluff.</p>
-      <form onsubmit="handleSubscribe(event)">
-        <input type="email" placeholder="your@email.com" required />
-        <button type="submit" class="btn btn-sm mt-1">Subscribe</button>
-      </form>
+      <p>Subscribe to get notified when a new post goes up. No spam, no fluff.</p>
+      <a href="https://jimdillingham.substack.com/subscribe" target="_blank" rel="noopener" class="btn btn-sm" style="display:block; text-align:center; margin-top:0.5rem;">Subscribe</a>
     </div>
 
     <!-- Facts & Fakes widget -->
