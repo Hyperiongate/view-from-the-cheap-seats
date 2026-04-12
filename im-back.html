@@ -116,8 +116,12 @@
     loadComments('im-back');
     setTimeout(function() {
       var btn = document.querySelector('.comment-form .btn');
+      console.log('btn found:', btn);
       if (btn) {
-        btn.addEventListener('click', function() { submitComment(this); });
+        btn.addEventListener('click', function() { 
+          console.log('btn clicked');
+          submitComment(this); 
+        });
       }
     }, 500);
 
