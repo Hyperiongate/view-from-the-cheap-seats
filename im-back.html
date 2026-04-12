@@ -114,16 +114,11 @@
     renderSidebar();
     renderFooter();
     loadComments('im-back');
-    setTimeout(function() {
-      var btn = document.querySelector('.comment-form .btn');
-      console.log('btn found:', btn);
-      if (btn) {
-        btn.addEventListener('click', function() { 
-          console.log('btn clicked');
-          submitComment(this); 
-        });
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('btn') && e.target.closest('.comment-form')) {
+        submitComment(e.target);
       }
-    }, 500);
+    });
 
     
   </script>
