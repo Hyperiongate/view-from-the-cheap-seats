@@ -124,7 +124,7 @@ async function submitComment(btn) {
     form.querySelector('input[type="email"]').value = '';
     btn.textContent = 'Comment Submitted';
     const msg = document.createElement('p');
-    msg.style.cssText = 'color:#c0392b; font-style:italic; margin-top:0.75rem; font-size:0.85rem;';
+    msg.className = 'comment-success';
     msg.textContent = data.message || 'Your comment has been submitted for review. Thanks!';
     form.appendChild(msg);
   } catch (err) {
