@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learn Something New in 5 Minutes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1a18;
+    --ink-muted: #5a5a55;
+    --ink-faint: #9a9a92;
+    --paper: #faf9f5;
+    --paper-warm: #f2f0e8;
+    --paper-card: #ffffff;
+    --accent: #8B4513;
+    --accent-light: #d4956a;
+    --rule: rgba(26,26,24,0.12);
+    --rule-strong: rgba(26,26,24,0.25);
+  }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+  }
+
+  .masthead {
+    width: 100%;
+    border-bottom: 2px solid var(--ink);
+    padding: 2.5rem 2rem 1.5rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .masthead::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 2px;
+    background: var(--accent);
+    margin: 0 auto 1.2rem;
+  }
+
+  .masthead-overline {
+    font-family: 'Source Serif 4', serif;
+    font-size: 11px;
+    font-weight: 300;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .masthead h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .masthead-sub {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink-muted);
+    margin-top: 0.75rem;
+  }
+
+  .page {
+    width: 100%;
+    max-width: 720px;
+    padding: 2.5rem 2rem 4rem;
+    flex: 1;
+  }
+
+  .controls-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-generate {
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--paper);
+    background: var(--ink);
+    border: none;
+    border-radius: 0;
+    padding: 0.85rem 2.2rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: background 0.2s, transform 0.1s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-generate:hover { background: #333330; }
+  .btn-generate:active { transform: scale(0.98); }
+  .btn-generate:disabled { background: var(--ink-faint); cursor: not-allowed; }
+
+  .btn-pdf {
+    font-family: 'Source Serif 4', serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--rule-strong);
+    padding: 0.85rem 1.6rem;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: border-color 0.2s, background 0.2s;
+    display: none;
+  }
+
+  .btn-pdf:hover {
+    border-color: var(--ink);
+    background: var(--paper-warm);
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--rule);
+    margin: 0 0 2.5rem;
+  }
+
+  .state-idle {
+    text-align: center;
+    padding: 3rem 0;
+  }
+
+  .state-idle p {
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink-muted);
+    line-height: 1.7;
+  }
+
+  .state-loading {
+    display: none;
+    text-align: center;
+    padding: 3rem 0;
+  }
+
+  .loading-label {
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 300;
+    margin-bottom: 1.2rem;
+  }
+
+  .loading-bar {
+    width: 180px;
+    height: 2px;
+    background: var(--rule);
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .loading-bar::after {
+    content: '';
+    position: absolute;
+    left: -60%;
+    width: 60%;
+    height: 100%;
+    background: var(--accent);
+    animation: sweep 1.2s ease-in-out infinite;
+  }
+
+  @keyframes sweep {
+    0% { left: -60%; }
+    100% { left: 110%; }
+  }
+
+  .lesson-area {
+    display: none;
+    animation: fadeUp 0.5s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .lesson-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--rule);
+    flex-wrap: wrap;
+  }
+
+  .lesson-tag {
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .lesson-readtime {
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--ink-faint);
+  }
+
+  .lesson-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+    color: var(--ink);
+  }
+
+  .lesson-body {
+    font-size: 17px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--ink);
+  }
+
+  .lesson-body p {
+    margin-bottom: 1.2em;
+  }
+
+  .lesson-body strong {
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .lesson-body em {
+    font-style: italic;
+    color: var(--ink-muted);
+  }
+
+  .lesson-takeaway {
+    margin-top: 2rem;
+    padding: 1.25rem 1.5rem;
+    border-left: 3px solid var(--accent);
+    background: var(--paper-warm);
+    font-size: 15px;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+
+  .error-msg {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+    font-style: italic;
+    color: #c0392b;
+    font-size: 15px;
+  }
+
+  .footer-rule {
+    width: 100%;
+    max-width: 720px;
+    border-top: 1px solid var(--rule-strong);
+    padding: 1.25rem 2rem;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    font-weight: 300;
+  }
+
+  @media (max-width: 480px) {
+    .masthead { padding: 2rem 1.25rem 1.25rem; }
+    .page { padding: 2rem 1.25rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <p class="masthead-overline">A daily curiosity from the View from the Cheap Seats</p>
+  <h1>Learn Something New<br>in Five Minutes</h1>
+  <p class="masthead-sub">Every lesson is different. Every lesson is real.</p>
+</div>
+
+<div class="page">
+
+  <div class="controls-area">
+    <button class="btn-generate" id="btnGenerate" onclick="generateLesson()">
+      Teach me something
+    </button>
+    <button class="btn-pdf" id="btnPdf" onclick="downloadPdf()">
+      Save as PDF
+    </button>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="state-idle" id="stateIdle">
+    <p>Press the button above.<br>You'll learn something you didn't know two minutes ago.</p>
+  </div>
+
+  <div class="state-loading" id="stateLoading">
+    <p class="loading-label">Selecting a topic&hellip;</p>
+    <div class="loading-bar"></div>
+  </div>
+
+  <div class="error-msg" id="errorMsg">
+    Something went wrong. Please try again in a moment.
+  </div>
+
+  <div class="lesson-area" id="lessonArea">
+    <div class="lesson-meta">
+      <span class="lesson-tag" id="lessonCategory"></span>
+      <span class="lesson-readtime">5 minute read</span>
+    </div>
+    <h2 class="lesson-title" id="lessonTitle"></h2>
+    <div class="lesson-body" id="lessonBody"></div>
+    <div class="lesson-takeaway" id="lessonTakeaway"></div>
+  </div>
+
+</div>
+
+<div class="footer-rule">
+  jimdillingham.com &mdash; powered by Claude AI
+</div>
+
+<script>
+let currentLesson = null;
+
+async function generateLesson() {
+  const btn = document.getElementById('btnGenerate');
+  const idle = document.getElementById('stateIdle');
+  const loading = document.getElementById('stateLoading');
+  const lessonArea = document.getElementById('lessonArea');
+  const errorMsg = document.getElementById('errorMsg');
+  const pdfBtn = document.getElementById('btnPdf');
+
+  btn.disabled = true;
+  btn.textContent = 'Finding a topic…';
+  idle.style.display = 'none';
+  lessonArea.style.display = 'none';
+  errorMsg.style.display = 'none';
+  pdfBtn.style.display = 'none';
+  loading.style.display = 'block';
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: `You are the writer of a crisp, intelligent five-minute lesson. Your job is to pick ONE genuinely interesting topic completely at random — it can be from any domain: history, science, mathematics, language, food, psychology, geography, music, economics, nature, technology, philosophy, or anything else. Then write a compelling short lesson about it.
+
+Return ONLY a JSON object with no markdown fences, no preamble:
+{
+  "category": "short category label (e.g. 'Natural Science', 'History', 'Psychology')",
+  "title": "A sharp, specific title for the lesson",
+  "paragraphs": ["paragraph 1", "paragraph 2", "paragraph 3", "paragraph 4"],
+  "takeaway": "One memorable sentence the reader will still remember tomorrow."
+}
+
+Rules:
+- The topic must be genuinely random and varied. Never repeat common topics.
+- Each paragraph 60–90 words. Engaging, clear, no fluff.
+- No bullet points. Prose only.
+- The takeaway is a single elegant sentence.
+- Return only the JSON object.`,
+        messages: [{ role: 'user', content: 'Give me a random lesson.' }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content.map(b => b.text || '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const lesson = JSON.parse(clean);
+    currentLesson = lesson;
+
+    document.getElementById('lessonCategory').textContent = lesson.category;
+    document.getElementById('lessonTitle').textContent = lesson.title;
+
+    const bodyEl = document.getElementById('lessonBody');
+    bodyEl.innerHTML = lesson.paragraphs.map(p => `<p>${p}</p>`).join('');
+
+    document.getElementById('lessonTakeaway').textContent = lesson.takeaway;
+
+    loading.style.display = 'none';
+    lessonArea.style.display = 'block';
+    pdfBtn.style.display = 'inline-block';
+
+    btn.textContent = 'Teach me something else';
+    btn.disabled = false;
+
+  } catch (err) {
+    loading.style.display = 'none';
+    errorMsg.style.display = 'block';
+    btn.textContent = 'Teach me something';
+    btn.disabled = false;
+  }
+}
+
+function downloadPdf() {
+  if (!currentLesson) return;
+
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>${currentLesson.title}</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  body { font-family: 'Source Serif 4', Georgia, serif; max-width: 600px; margin: 60px auto; padding: 0 2rem; color: #1a1a18; }
+  .overline { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #888; margin-bottom: 0.5rem; }
+  .site { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 400; border-bottom: 2px solid #1a1a18; padding-bottom: 1rem; margin-bottom: 2rem; }
+  .category { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #8B4513; margin-bottom: 0.5rem; }
+  h1 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; line-height: 1.2; margin-bottom: 1.5rem; }
+  p { font-size: 16px; font-weight: 300; line-height: 1.8; margin-bottom: 1.1em; }
+  .takeaway { border-left: 3px solid #8B4513; padding: 1rem 1.25rem; background: #f2f0e8; font-style: italic; margin-top: 2rem; font-size: 15px; line-height: 1.7; }
+  .footer { margin-top: 3rem; font-size: 11px; color: #aaa; text-align: center; letter-spacing: 0.1em; text-transform: uppercase; border-top: 1px solid #ddd; padding-top: 1rem; }
+</style>
+</head>
+<body>
+<p class="overline">Learn Something New in Five Minutes</p>
+<p class="site">jimdillingham.com</p>
+<p class="category">${currentLesson.category}</p>
+<h1>${currentLesson.title}</h1>
+${currentLesson.paragraphs.map(p => `<p>${p}</p>`).join('')}
+<div class="takeaway">${currentLesson.takeaway}</div>
+<div class="footer">Generated by Claude AI &mdash; jimdillingham.com</div>
+</body>
+</html>`);
+  win.document.close();
+  setTimeout(() => win.print(), 800);
+}
+</script>
+</body>
+</html>
