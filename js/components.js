@@ -34,7 +34,7 @@ function renderSidebar() {
     <div class="sidebar-widget">
       <h4>Get New Posts</h4>
       <p>Subscribe to get notified when a new post goes up. No spam, no fluff.</p>
-      <a href="https://jimdillingham.substack.com/subscribe" target="_blank" rel="noopener" class="btn btn-sm" style="display:block; text-align:center; margin-top:0.5rem;">Subscribe</a>
+      <a href="https://jimdillingham.substack.com/subscribe" target="_blank" rel="noopener" class="btn btn-sm" style="display:block; text-align:center; margin-top:0.5rem;">Subscribe on Substack</a>
     </div>
 
     <!-- Facts & Fakes widget -->
@@ -61,10 +61,10 @@ function renderSidebar() {
     <!-- Podcast widget -->
     <div class="sidebar-widget">
       <h4>The Podcast</h4>
-      <a href="#podcast-link" target="_blank" rel="noopener" class="sidebar-link">
+      <p class="sidebar-link" style="cursor:default; border-bottom:none; color:var(--muted);">
         <span class="icon">🎙️</span>
-        Meat and the Machine — listen on Spotify
-      </a>
+        Meat and the Machine — coming soon to Spotify
+      </p>
       <p class="mt-1" style="font-size:0.78rem; color:var(--muted); font-style:italic;">
         Real conversations between a human mind and an artificial one.
       </p>
@@ -92,22 +92,13 @@ function renderFooter() {
   `;
 }
 
-// ----- Subscribe handler (placeholder) -----
-function handleSubscribe(e) {
-  e.preventDefault();
-  const input = e.target.querySelector('input[type="email"]');
-  alert(`Thanks! We'll notify ${input.value} when new posts go up.`);
-  input.value = '';
-  // TODO: wire to your email list backend / Swarm
-}
-
 // ----- Comments -----
 const COMMENTS_API = 'https://jamesdillingham-comments.onrender.com';
 
 async function submitComment(btn) {
   const form = btn.closest('.comment-form');
   const body = form.querySelector('textarea').value.trim();
-  const name = form.querySelector('input[type="text"]').value.trim();
+  const name = form.querySelector('input[type="text"]:not([name="_gotcha"])').value.trim();
   const email = form.querySelector('input[type="email"]').value.trim();
 
   const honeypot = form.querySelector('input[name="_gotcha"]');
@@ -124,7 +115,7 @@ async function submitComment(btn) {
   btn.textContent = 'Submitting...';
 
   try {
-    // Step 1: Save to database
+    // Save to database
     const res = await fetch(`${COMMENTS_API}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -132,7 +123,7 @@ async function submitComment(btn) {
     });
     const data = await res.json();
 
-    // Step 2: Notify Jim via Formspree from browser
+    // Notify Jim via Formspree
     await fetch('https://formspree.io/f/xzdypeyp', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -146,10 +137,15 @@ async function submitComment(btn) {
     });
 
     form.querySelector('textarea').value = '';
-    form.querySelector('input[type="text"]').value = '';
+    form.querySelector('input[type="text"]:not([name="_gotcha"])').value = '';
     form.querySelector('input[type="email"]').value = '';
     btn.textContent = 'Comment Submitted';
     btn.disabled = false;
+
+    // Remove any previous success message
+    const oldMsg = form.querySelector('.comment-success');
+    if (oldMsg) oldMsg.remove();
+
     const msg = document.createElement('p');
     msg.className = 'comment-success';
     msg.textContent = data.message || 'Your comment has been submitted for review. Thanks!';
@@ -173,14 +169,21 @@ async function loadComments(postSlug) {
     }
     list.innerHTML = data.comments.map(c => `
       <div style="padding:1rem 0; border-top:1px solid var(--border);">
-        <strong style="font-size:0.9rem;">${c.name}</strong>
+        <strong style="font-size:0.9rem;">${escapeHtml(c.name)}</strong>
         <span style="font-size:0.75rem; color:var(--muted); margin-left:0.5rem;">${new Date(c.created_at).toLocaleDateString()}</span>
-        <p style="margin-top:0.4rem; font-size:0.95rem;">${c.body}</p>
+        <p style="margin-top:0.4rem; font-size:0.95rem;">${escapeHtml(c.body)}</p>
       </div>
     `).join('');
   } catch (err) {
     console.error('Could not load comments:', err);
   }
+}
+
+// Basic XSS protection for displayed comments
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 // ----- Event delegation for comment buttons -----
