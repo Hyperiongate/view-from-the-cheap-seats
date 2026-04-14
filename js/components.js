@@ -98,7 +98,7 @@ async function submitComment(btn) {
   const name = form.querySelector('input[type="text"]').value.trim();
   const email = form.querySelector('input[type="email"]').value.trim();
 
-const honeypot = form.querySelector('input[name="_gotcha"]');
+  const honeypot = form.querySelector('input[name="_gotcha"]');
   if (honeypot && honeypot.value) return;
 
   if (!body || !name) {
@@ -171,77 +171,6 @@ async function loadComments(postSlug) {
   }
 }
 
-// ----- Audio player logic -----
-// On first click: fetch from ElevenLabs API if no cached file,
-// then play and store. On subsequent clicks: play cached audio.
-async function handleAudioPlay(postSlug, btn) {
-  const audioId = `audio-${postSlug}`;
-  let audioEl = document.getElementById(audioId);
-
-  if (audioEl && audioEl.src) {
-    // Already loaded — just toggle play/pause
-    audioEl.paused ? audioEl.play() : audioEl.pause();
-    updateAudioBtn(btn, !audioEl.paused);
-    return;
-  }
-
-  // Check if cached audio file exists
-  const cachedUrl = `posts/audio/${postSlug}.mp3`;
-  const exists = await checkFileExists(cachedUrl);
-
-  if (exists) {
-    playAudio(audioId, cachedUrl, btn);
-  } else {
-    // First-ever play: generate via ElevenLabs (server-side endpoint)
-    btn.innerHTML = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="none"/><text x="6" y="16" fill="white" font-size="8">...</text></svg>`;
-    btn.disabled = true;
-
-    try {
-      const res = await fetch(`/api/generate-audio?slug=${postSlug}`);
-      const data = await res.json();
-      if (data.url) {
-        playAudio(audioId, data.url, btn);
-      }
-    } catch (err) {
-      console.error('Audio generation failed:', err);
-      btn.disabled = false;
-      resetAudioBtn(btn);
-    }
-  }
-}
-
-function playAudio(audioId, url, btn) {
-  let audioEl = document.getElementById(audioId);
-  if (!audioEl) {
-    audioEl = document.createElement('audio');
-    audioEl.id = audioId;
-    btn.closest('.audio-player').appendChild(audioEl);
-  }
-  audioEl.src = url;
-  audioEl.play();
-  updateAudioBtn(btn, true);
-
-  audioEl.addEventListener('ended', () => updateAudioBtn(btn, false));
-  audioEl.addEventListener('pause', () => updateAudioBtn(btn, false));
-}
-
-function updateAudioBtn(btn, playing) {
-  btn.disabled = false;
-  btn.innerHTML = playing
-    ? `<svg viewBox="0 0 24 24"><rect x="6" y="4" width="4" height="16" fill="white"/><rect x="14" y="4" width="4" height="16" fill="white"/></svg>`
-    : `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="white"/></svg>`;
-}
-
-function resetAudioBtn(btn) {
-  btn.innerHTML = `<svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21" fill="white"/></svg>`;
-}
-
-async function checkFileExists(url) {
-  try {
-    const res = await fetch(url, { method: 'HEAD' });
-    return res.ok;
-  } catch { return false; }
-}
 // ----- Event delegation for comment buttons -----
 document.addEventListener('click', function(e) {
   if (e.target && e.target.classList.contains('btn') && e.target.closest('.comment-form')) {
