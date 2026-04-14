@@ -46,6 +46,18 @@ function renderSidebar() {
       </a>
     </div>
 
+    <!-- Learn Something New widget -->
+    <div class="sidebar-widget">
+      <h4>Learn Something New</h4>
+      <a href="learn-something-new.html" class="sidebar-link">
+        <span class="icon">💡</span>
+        A random lesson in under 5 minutes — powered by AI
+      </a>
+      <p class="mt-1" style="font-size:0.78rem; color:var(--muted); font-style:italic;">
+        Something different every time. Give it a click.
+      </p>
+    </div>
+
     <!-- Podcast widget -->
     <div class="sidebar-widget">
       <h4>The Podcast</h4>
