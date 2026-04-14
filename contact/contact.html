@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact — View from the Cheap Seats</title>
+  <meta name="description" content="Get in touch with James Dillingham. Questions, feedback, or disagreements welcome." />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -19,6 +20,9 @@
 
         <div class="contact-form">
           <form id="contact-form" onsubmit="handleContact(event)">
+
+            <!-- Honeypot anti-spam -->
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
 
             <div class="form-group">
               <label for="contact-name">Your Name</label>
@@ -40,15 +44,19 @@
               <textarea id="contact-message" name="message" placeholder="Say what's on your mind. You don't have to agree with me." required></textarea>
             </div>
 
-            <button type="submit" class="btn">Send Message</button>
+            <button type="submit" class="btn" id="contact-btn">Send Message</button>
 
             <p class="mt-2" style="font-size:0.8rem; color:var(--muted); font-style:italic;">
-              This form routes through a secure backend. Your information won't be shared or sold.
+              Your information won't be shared or sold.
             </p>
           </form>
 
           <div id="contact-success" style="display:none; padding:1.5rem; background:var(--sidebar-bg); border:1px solid var(--border); border-radius:2px; margin-top:1.5rem;">
             <strong>Message sent.</strong> I'll get back to you if I can.
+          </div>
+
+          <div id="contact-error" style="display:none; padding:1.5rem; background:#fdf2f2; border:1px solid #e8aaaa; border-radius:2px; margin-top:1.5rem;">
+            <strong>Something went wrong.</strong> Try again, or email me directly at Jim@shift-work.com.
           </div>
         </div>
       </main>
@@ -67,21 +75,42 @@
 
     async function handleContact(e) {
       e.preventDefault();
+
+      // Honeypot check
+      const honeypot = e.target.querySelector('input[name="_gotcha"]');
+      if (honeypot && honeypot.value) return;
+
       const form = e.target;
+      const btn = document.getElementById('contact-btn');
       const data = {
-        name:    form.name.value,
-        email:   form.email.value,
-        subject: form.subject.value,
-        message: form.message.value,
+        name:     form.querySelector('#contact-name').value.trim(),
+        email:    form.querySelector('#contact-email').value.trim(),
+        _subject: form.querySelector('#contact-subject').value.trim() || 'Contact form — View from the Cheap Seats',
+        message:  form.querySelector('#contact-message').value.trim(),
       };
 
-      // TODO: POST to your Swarm backend endpoint
-      // Example: await fetch('/api/contact', { method:'POST', body: JSON.stringify(data), headers:{'Content-Type':'application/json'} });
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
 
-      console.log('Contact form submitted:', data);
+      try {
+        const res = await fetch('https://formspree.io/f/xzdypeyp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        });
 
-      form.style.display = 'none';
-      document.getElementById('contact-success').style.display = 'block';
+        if (res.ok) {
+          form.style.display = 'none';
+          document.getElementById('contact-success').style.display = 'block';
+        } else {
+          throw new Error('Form submission failed');
+        }
+      } catch (err) {
+        console.error('Contact form error:', err);
+        document.getElementById('contact-error').style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Send Message';
+      }
     }
   </script>
 </body>
