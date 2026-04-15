@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact — View from the Cheap Seats</title>
   <meta name="description" content="Get in touch with James Dillingham. Questions, feedback, or disagreements welcome." />
+  <link rel="canonical" href="https://jamesdillingham.com/contact.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Contact — View from the Cheap Seats" />
+  <meta property="og:description" content="Get in touch with James Dillingham. Questions, feedback, or disagreements welcome." />
+  <meta property="og:url" content="https://jamesdillingham.com/contact.html" />
+  <meta property="og:image" content="https://jamesdillingham.com/assets/hero.jpg" />
+  <meta property="og:site_name" content="View from the Cheap Seats" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -76,7 +85,6 @@
     async function handleContact(e) {
       e.preventDefault();
 
-      // Honeypot check
       const honeypot = e.target.querySelector('input[name="_gotcha"]');
       if (honeypot && honeypot.value) return;
 
