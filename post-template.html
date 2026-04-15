@@ -4,8 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- UPDATE THESE FOR EACH POST -->
-  <title>This Is What Bad Faith Looks Like — View from the Cheap Seats</title>
-  <meta name="description" content="When the facts are clear and someone tells you otherwise anyway, that's not a different perspective. That's a lie with a microphone." />
+  <title>POST TITLE HERE — View from the Cheap Seats</title>
+  <meta name="description" content="POST DESCRIPTION HERE — one or two sentences max." />
+  <link rel="canonical" href="https://jamesdillingham.com/POST-SLUG.html" />
+  <!-- Open Graph — update title, description, url for each post -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="POST TITLE HERE — View from the Cheap Seats" />
+  <meta property="og:description" content="POST DESCRIPTION HERE" />
+  <meta property="og:url" content="https://jamesdillingham.com/POST-SLUG.html" />
+  <meta property="og:image" content="https://jamesdillingham.com/assets/hero.jpg" />
+  <meta property="og:site_name" content="View from the Cheap Seats" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="POST TITLE HERE — View from the Cheap Seats" />
+  <meta name="twitter:description" content="POST DESCRIPTION HERE" />
+  <meta name="twitter:image" content="https://jamesdillingham.com/assets/hero.jpg" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -20,26 +34,24 @@
 
           <div class="post-meta">
             <!-- UPDATE: date and tag for each post -->
-            <span class="post-date">April 9, 2026</span>
+            <span class="post-date">Month DD, YYYY</span>
             <span class="post-tag">Political Analysis</span>
           </div>
 
           <!-- UPDATE: post title -->
-          <h1 class="post-title">This Is What Bad Faith Looks Like</h1>
+          <h1 class="post-title">POST TITLE HERE</h1>
 
           <!-- POST BODY: replace everything between these comments -->
           <!-- ===================== POST CONTENT START ===================== -->
           <div class="post-body">
 
-            <p>Your post content goes here. This is the actual article, fully written out. Use standard HTML for formatting.</p>
+            <p>Your post content goes here.</p>
 
-            <p>You can use paragraphs, headers, blockquotes, and embedded media. Keep the writing clean and let the argument carry the weight.</p>
+            <p>You can use paragraphs, headers, blockquotes, and embedded media.</p>
 
             <blockquote>
-              If you want to make a pull quote stand out, put it in a blockquote. It'll get the red left border treatment.
+              Pull quotes get the red left border treatment.
             </blockquote>
-
-            <p>Add as many paragraphs as you need. There's no word limit, but I'd aim for 400–800 words as a sweet spot for political analysis — enough to make the argument properly, not so long it becomes a chore.</p>
 
             <!-- Embed video (optional) -->
             <!--
@@ -53,7 +65,7 @@
           </div>
           <!-- ===================== POST CONTENT END ===================== -->
 
-          <!-- AI Review note (optional — include on posts that went through Swarm review) -->
+          <!-- AI Review note -->
           <div class="ai-badge mt-3">
             <span class="ai-icon">🤖</span>
             <span>This post was reviewed by the Swarm AI panel before publishing. The arguments were stress-tested across multiple AI systems for logical consistency and blind spots. All conclusions are Jim's.</span>
@@ -65,23 +77,21 @@
             <p class="comments-note">You don't have to agree with me. You just have to be civil. I read everything.</p>
 
             <div class="comment-form">
+              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
               <textarea placeholder="Your thoughts..."></textarea>
-              <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
-                <input type="text" placeholder="Your name" />
-                <input type="email" placeholder="Email (not published)" />
-              </div>
-              <button class="btn" onclick="submitComment(this)">Post Comment</button>
+              <input type="text" placeholder="Your name" />
+              <input type="email" placeholder="Email (not published)" />
+              <button class="btn">Post Comment</button>
             </div>
 
-            <!-- Existing comments will render here -->
             <div id="comments-list" style="margin-top:2rem;"></div>
           </div>
 
         </article>
 
-        <!-- Post navigation -->
+        <!-- Post navigation — UPDATE prev/next links -->
         <div style="display:flex; justify-content:space-between; padding: 1rem 0; font-size:0.85rem;">
-          <a href="index.html" style="color:var(--muted);">← Back to latest post</a>
+          <a href="PREV-POST.html" style="color:var(--muted);">← Previous post</a>
           <a href="archive.html" style="color:var(--muted);">All posts →</a>
         </div>
 
@@ -98,26 +108,7 @@
     renderHeader('');
     renderSidebar();
     renderFooter();
-
-    function submitComment(btn) {
-      const form = btn.closest('.comment-form');
-      const text = form.querySelector('textarea').value.trim();
-      const name = form.querySelector('input[type="text"]').value.trim();
-      if (!text || !name) { alert('Please enter your name and a comment.'); return; }
-
-      // TODO: POST to backend for moderation / storage
-      const list = document.getElementById('comments-list');
-      const div = document.createElement('div');
-      div.style.cssText = 'padding:1rem 0; border-top:1px solid var(--border);';
-      div.innerHTML = `<strong style="font-size:0.9rem;">${name}</strong>
-        <span style="font-size:0.75rem; color:var(--muted); margin-left:0.5rem;">just now</span>
-        <p style="margin-top:0.4rem; font-size:0.95rem;">${text}</p>`;
-      list.prepend(div);
-
-      form.querySelector('textarea').value = '';
-      form.querySelector('input[type="text"]').value = '';
-      form.querySelector('input[type="email"]').value = '';
-    }
+    loadComments('POST-SLUG');  // UPDATE: match your filename without .html
   </script>
 </body>
 </html>
