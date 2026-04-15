@@ -1,11 +1,24 @@
-<!DOCTYPE html>  
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- UPDATE THESE FOR EACH POST -->
   <title>I'm Back — View from the Cheap Seats</title>
   <meta name="description" content="I'm mad as hell and I'm not going to take it anymore. A return to the soapbox, a long list of damage, and an observation about ducks." />
+  <link rel="canonical" href="https://jamesdillingham.com/im-back.html" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="I'm Back — View from the Cheap Seats" />
+  <meta property="og:description" content="I'm mad as hell and I'm not going to take it anymore. A return to the soapbox, a long list of damage, and an observation about ducks." />
+  <meta property="og:url" content="https://jamesdillingham.com/im-back.html" />
+  <meta property="og:image" content="https://jamesdillingham.com/assets/hero.jpg" />
+  <meta property="og:site_name" content="View from the Cheap Seats" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="I'm Back — View from the Cheap Seats" />
+  <meta name="twitter:description" content="I'm mad as hell and I'm not going to take it anymore. A return to the soapbox, a long list of damage, and an observation about ducks." />
+  <meta name="twitter:image" content="https://jamesdillingham.com/assets/hero.jpg" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -19,12 +32,10 @@
         <article class="post-card">
 
           <div class="post-meta">
-            <!-- UPDATE: date and tag for each post -->
             <span class="post-date">April 11, 2026</span>
             <span class="post-tag">Political Analysis</span>
           </div>
 
-          <!-- UPDATE: post title -->
           <h1 class="post-title">I'm Back</h1>
 
           <!-- ===================== POST CONTENT START ===================== -->
@@ -59,7 +70,6 @@
           </div>
           <!-- ===================== POST CONTENT END ===================== -->
 
-          <!-- AI Review note (optional — include on posts that went through Swarm review) -->
           <div class="ai-badge mt-3">
             <span class="ai-icon">🤖</span>
             <span>This post was reviewed by the Swarm AI panel before publishing. The arguments were stress-tested across multiple AI systems for logical consistency and blind spots. All conclusions are Jim's.</span>
@@ -73,19 +83,16 @@
             <div class="comment-form">
               <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
               <textarea placeholder="Your thoughts..."></textarea>
-                <input type="text" placeholder="Your name" />
-                <input type="email" placeholder="Email (not published)" />
-              </div>
+              <input type="text" placeholder="Your name" />
+              <input type="email" placeholder="Email (not published)" />
               <button class="btn">Post Comment</button>
             </div>
 
-            <!-- Existing comments will render here -->
             <div id="comments-list" style="margin-top:2rem;"></div>
           </div>
 
         </article>
 
-        <!-- Post navigation -->
         <div style="display:flex; justify-content:space-between; padding: 1rem 0; font-size:0.85rem;">
           <a href="index.html" style="color:var(--muted);">← Back to latest post</a>
           <a href="archive.html" style="color:var(--muted);">All posts →</a>
@@ -99,19 +106,12 @@
 
   <footer class="site-footer" id="site-footer"></footer>
 
-  <script src="js/components.js?v=4"></script>
+  <script src="js/components.js"></script>
   <script>
     renderHeader('');
     renderSidebar();
     renderFooter();
     loadComments('im-back');
-    document.addEventListener('click', function(e) {
-      if (e.target && e.target.classList.contains('btn') && e.target.closest('.comment-form')) {
-        submitComment(e.target);
-      }
-    });
-
-    
   </script>
 </body>
 </html>
