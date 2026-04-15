@@ -5,9 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Learn Something New — View from the Cheap Seats</title>
   <meta name="description" content="A random five-minute lesson powered by AI. Learn something you didn't know yesterday." />
+  <link rel="canonical" href="https://jamesdillingham.com/learn-something-new.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Learn Something New — View from the Cheap Seats" />
+  <meta property="og:description" content="A random five-minute lesson powered by AI. Learn something you didn't know yesterday." />
+  <meta property="og:url" content="https://jamesdillingham.com/learn-something-new.html" />
+  <meta property="og:image" content="https://jamesdillingham.com/assets/hero.jpg" />
+  <meta property="og:site_name" content="View from the Cheap Seats" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
-    /* Page-specific overrides */
     .lesson-wrapper {
       max-width: 720px;
       margin: 0 auto;
@@ -54,7 +62,6 @@
       margin-bottom: 2.5rem;
     }
 
-    /* States */
     .state-idle {
       text-align: center;
       padding: 3rem 0;
@@ -106,7 +113,6 @@
       100% { left: 110%; }
     }
 
-    /* Lesson card */
     .lesson-card {
       display: none;
       animation: fadeUp 0.45s ease;
@@ -243,6 +249,9 @@
     renderSidebar();
     renderFooter();
 
+    // Calls the proxy endpoint on your Render backend, which holds the API key securely
+    const LESSON_API = 'https://jamesdillingham-comments.onrender.com/lesson';
+
     async function generateLesson() {
       const btn = document.getElementById('btnGenerate');
       const idle = document.getElementById('stateIdle');
@@ -258,37 +267,11 @@
       loading.style.display = 'block';
 
       try {
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 1000,
-            system: `You write crisp, intelligent short lessons. Pick ONE genuinely interesting topic completely at random from any domain: history, science, mathematics, language, food, psychology, geography, music, economics, nature, technology, philosophy, art, medicine, engineering, or anything else. Then write a compelling lesson about it in 300 words or fewer.
+        const response = await fetch(LESSON_API, { method: 'POST' });
 
-Return ONLY a JSON object with no markdown fences, no preamble:
-{
-  "category": "short category label (e.g. 'Natural Science', 'History', 'Psychology')",
-  "title": "A sharp, specific title for the lesson",
-  "paragraphs": ["paragraph 1", "paragraph 2", "paragraph 3"],
-  "takeaway": "One memorable sentence the reader will remember tomorrow."
-}
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
 
-Rules:
-- The topic must be genuinely random and varied across every possible domain. Surprise the reader.
-- Total word count across all paragraphs must be 300 words or fewer.
-- 3-4 paragraphs, each 60-90 words. Engaging, clear, no fluff.
-- No bullet points. Prose only.
-- The takeaway is a single elegant sentence.
-- Return only the JSON object, nothing else.`,
-            messages: [{ role: 'user', content: 'Give me a random lesson.' }]
-          })
-        });
-
-        const data = await response.json();
-        const text = data.content.map(b => b.text || '').join('');
-        const clean = text.replace(/```json|```/g, '').trim();
-        const lesson = JSON.parse(clean);
+        const lesson = await response.json();
 
         document.getElementById('lessonCategory').textContent = lesson.category;
         document.getElementById('lessonTitle').textContent = lesson.title;
