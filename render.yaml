@@ -1,14 +1,16 @@
 services:
   - type: web
-    name: view-from-the-cheap-seats
-    env: static
-    buildCommand: ""
-    staticPublishPath: .
-    headers:
-      - path: /*
-        name: Cache-Control
-        value: public, max-age=3600
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
+    name: jamesdillingham-comments
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    # Environment variables are managed in the Render dashboard, NOT here.
+    # Storing secrets in render.yaml is a security risk if this repo is public.
+    #
+    # Required env vars to set in Render dashboard:
+    #   DATABASE_URL      — internal PostgreSQL connection string
+    #   NOTIFY_EMAIL      — Jim@shift-work.com
+    #   APPROVE_SECRET    — your approval token
+    #   BASE_URL          — https://jamesdillingham-comments.onrender.com
+    #   FORMSPREE_URL     — https://formspree.io/f/xzdypeyp
+    #   ANTHROPIC_API_KEY — from console.anthropic.com/settings/keys
