@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>World Gratitude List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --ink: #1c1a17;
+  --ink-soft: #4a4640;
+  --ink-faint: #9c9690;
+  --warm-white: #faf8f4;
+  --warm-off: #f2efe8;
+  --amber: #b8842a;
+  --amber-pale: #f5e6c8;
+  --amber-glow: rgba(184,132,42,0.12);
+  --stone: #e8e4dc;
+  --card: rgba(255,253,248,0.92);
+  --shadow: 0 2px 20px rgba(28,26,23,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  background: var(--warm-white);
+  color: var(--ink);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Atmospheric background */
+.bg-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(184,132,42,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(184,132,42,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, #faf8f4 0%, #f0ece2 100%);
+  pointer-events: none;
+}
+
+/* Scattered pinhole texture overlay */
+.bg-canvas::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.wrapper {
+  position: relative;
+  z-index: 1;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 1.5rem 6rem;
+}
+
+/* ── HEADER ── */
+header {
+  text-align: center;
+  padding: 4rem 0 3rem;
+  border-bottom: 1px solid var(--stone);
+  margin-bottom: 3rem;
+}
+
+.eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--amber);
+  font-weight: 400;
+  margin-bottom: 1.2rem;
+}
+
+h1 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 1.2rem;
+}
+
+h1 em {
+  font-style: italic;
+  color: var(--amber);
+}
+
+.tagline {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  max-width: 440px;
+  margin: 0 auto 0;
+  font-weight: 300;
+}
+
+/* ── COUNTER STRIP ── */
+.counter-strip {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  padding: 1.4rem 0;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid var(--stone);
+}
+
+.counter-item {
+  text-align: center;
+}
+
+.counter-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--amber);
+  line-height: 1;
+  display: block;
+}
+
+.counter-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.counter-divider {
+  width: 1px;
+  height: 30px;
+  background: var(--stone);
+}
+
+/* ── POST FORM ── */
+.post-section {
+  background: var(--card);
+  border: 1px solid var(--stone);
+  border-radius: 4px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  box-shadow: var(--shadow);
+}
+
+.section-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin-bottom: 1.25rem;
+  color: var(--ink);
+}
+
+.section-label span {
+  color: var(--amber);
+  font-style: italic;
+}
+
+textarea {
+  width: 100%;
+  border: 1px solid var(--stone);
+  border-radius: 2px;
+  padding: 1rem;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink);
+  background: var(--warm-white);
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+  transition: border-color 0.2s;
+  margin-bottom: 0.875rem;
+}
+
+textarea:focus { outline: none; border-color: var(--amber); }
+textarea::placeholder { color: var(--ink-faint); }
+
+.form-row {
+  display: flex;
+  gap: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+input[type="text"] {
+  flex: 1;
+  border: 1px solid var(--stone);
+  border-radius: 2px;
+  padding: 0.6rem 0.875rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 300;
+  color: var(--ink);
+  background: var(--warm-white);
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus { outline: none; border-color: var(--amber); }
+input[type="text"]::placeholder { color: var(--ink-faint); }
+
+.submit-btn {
+  background: var(--amber);
+  color: #faf8f4;
+  border: none;
+  padding: 0.7rem 1.75rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.submit-btn:hover { background: #9a6e22; }
+.submit-btn:active { transform: scale(0.98); }
+.submit-btn:disabled { background: var(--ink-faint); cursor: not-allowed; }
+
+.char-count {
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  text-align: right;
+  margin-top: -0.5rem;
+  margin-bottom: 0.875rem;
+}
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.filter-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-right: 0.25rem;
+}
+
+.filter-chip {
+  border: 1px solid var(--stone);
+  border-radius: 20px;
+  padding: 0.3rem 0.875rem;
+  font-size: 0.78rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  color: var(--ink-soft);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.filter-chip:hover { border-color: var(--amber); color: var(--amber); }
+
+.filter-chip.active {
+  background: var(--amber-pale);
+  border-color: var(--amber);
+  color: var(--amber);
+  font-weight: 400;
+}
+
+/* ── ENTRIES WALL ── */
+.wall-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+}
+
+.wall-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.sort-toggle {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  cursor: pointer;
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.sort-toggle:hover { color: var(--amber); }
+
+/* Masonry-ish column layout */
+.entries-grid {
+  columns: 2;
+  column-gap: 1.25rem;
+}
+
+@media (max-width: 580px) {
+  .entries-grid { columns: 1; }
+}
+
+/* ── ENTRY CARD ── */
+.entry-card {
+  break-inside: avoid;
+  background: var(--card);
+  border: 1px solid var(--stone);
+  border-radius: 3px;
+  padding: 1.25rem 1.375rem;
+  margin-bottom: 1.25rem;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+  animation: cardIn 0.4s ease both;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.entry-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--amber);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.entry-card:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
+.entry-card:hover::before { opacity: 1; }
+
+.entry-quote-mark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--amber-pale);
+  position: absolute;
+  top: 0.4rem;
+  right: 1rem;
+  pointer-events: none;
+  user-select: none;
+}
+
+.entry-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--ink);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.entry-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.entry-author {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.entry-meta {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.entry-category {
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--amber);
+  background: var(--amber-glow);
+  border-radius: 12px;
+  padding: 0.15em 0.6em;
+  font-weight: 400;
+}
+
+.entry-date {
+  font-size: 0.72rem;
+  color: var(--ink-faint);
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 4rem 0;
+  color: var(--ink-faint);
+}
+
+.empty-state p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  line-height: 1.6;
+}
+
+/* ── LOADING STATE ── */
+.loading-state {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.spinner {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--stone);
+  border-top-color: var(--amber);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-state p {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+/* ── SUBMIT SUCCESS ── */
+.success-toast {
+  display: none;
+  background: var(--amber-pale);
+  border: 1px solid var(--amber);
+  border-radius: 2px;
+  padding: 0.875rem 1.25rem;
+  font-size: 0.875rem;
+  color: var(--ink);
+  margin-top: 1rem;
+  font-style: italic;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+}
+
+/* ── PHILOSOPHY FOOTER ── */
+.philosophy {
+  text-align: center;
+  padding: 3rem 0 0;
+  margin-top: 4rem;
+  border-top: 1px solid var(--stone);
+}
+
+.philosophy p {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-faint);
+  line-height: 1.7;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
+.philosophy .source {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-top: 1rem;
+  font-style: normal;
+}
+
+/* ── BACK LINK ── */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  text-decoration: none;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  transition: color 0.2s;
+}
+
+.back-link:hover { color: var(--amber); }
+</style>
+</head>
+<body>
+
+<div class="bg-canvas"></div>
+
+<div class="wrapper">
+
+  <a href="index.html" class="back-link">← View from the Cheap Seats</a>
+
+  <header>
+    <p class="eyebrow">A collective practice</p>
+    <h1>World<br><em>Gratitude</em> List</h1>
+    <p class="tagline">It is nearly impossible to be in a state of gratitude and simultaneously in a state of fear or anger. Enter yours here.</p>
+  </header>
+
+  <div class="counter-strip" id="counter-strip">
+    <div class="counter-item">
+      <span class="counter-num" id="count-total">—</span>
+      <span class="counter-label">gratitudes</span>
+    </div>
+    <div class="counter-divider"></div>
+    <div class="counter-item">
+      <span class="counter-num" id="count-today">—</span>
+      <span class="counter-label">today</span>
+    </div>
+    <div class="counter-divider"></div>
+    <div class="counter-item">
+      <span class="counter-num" id="count-categories">8</span>
+      <span class="counter-label">themes</span>
+    </div>
+  </div>
+
+  <!-- POST FORM -->
+  <div class="post-section">
+    <p class="section-label">What are you <span>grateful for</span> today?</p>
+    <textarea id="gratitude-text" maxlength="500" placeholder="I'm grateful for…" oninput="updateCharCount()"></textarea>
+    <p class="char-count"><span id="char-count">0</span> / 500</p>
+    <div class="form-row">
+      <input type="text" id="author-name" placeholder="Your name (optional — leave blank to post anonymously)" />
+    </div>
+    <button class="submit-btn" id="submit-btn" onclick="submitGratitude()">Add to the wall</button>
+    <div class="success-toast" id="success-toast">
+      Your gratitude has been added to the wall. Thank you for contributing to this space.
+    </div>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <span class="filter-label">Browse by</span>
+    <button class="filter-chip active" onclick="setFilter('all', this)">All</button>
+    <button class="filter-chip" onclick="setFilter('Family & Friends', this)">Family & Friends</button>
+    <button class="filter-chip" onclick="setFilter('Health & Body', this)">Health & Body</button>
+    <button class="filter-chip" onclick="setFilter('Nature & Earth', this)">Nature & Earth</button>
+    <button class="filter-chip" onclick="setFilter('Work & Purpose', this)">Work & Purpose</button>
+    <button class="filter-chip" onclick="setFilter('Everyday Moments', this)">Everyday Moments</button>
+    <button class="filter-chip" onclick="setFilter('Pets & Animals', this)">Pets & Animals</button>
+    <button class="filter-chip" onclick="setFilter('Growth & Learning', this)">Growth & Learning</button>
+    <button class="filter-chip" onclick="setFilter('Love & Connection', this)">Love & Connection</button>
+  </div>
+
+  <!-- WALL -->
+  <div class="wall-header">
+    <span class="wall-title" id="wall-title">The wall</span>
+    <button class="sort-toggle" onclick="toggleSort()">Sort: <span id="sort-label">newest</span> ↕</button>
+  </div>
+
+  <div id="entries-container">
+    <div class="loading-state" id="loading-state">
+      <div class="spinner"></div>
+      <p>Loading the wall…</p>
+    </div>
+    <div class="entries-grid" id="entries-grid"></div>
+    <div class="empty-state" id="empty-state" style="display:none;">
+      <p>No entries in this category yet.<br>Be the first to add yours.</p>
+    </div>
+  </div>
+
+  <div class="philosophy">
+    <p>"It is nearly impossible to experience fear and gratitude simultaneously. Gratitude is the antidote."</p>
+    <p class="source">The philosophy behind this wall</p>
+  </div>
+
+</div>
+
+<script>
+const API = 'https://jamesdillingham-comments.onrender.com';
+const GRATITUDE_ENDPOINT = `${API}/gratitude`;
+
+let allEntries = [];
+let activeFilter = 'all';
+let sortNewest = true;
+
+const DEMO_ENTRIES = [
+  { id: 1, gratitude_text: "My daughter laughed so hard at breakfast this morning that orange juice came out of her nose. I will remember that laugh for the rest of my life.", author_name: "Marcus T.", category: "Family & Friends", timestamp: new Date(Date.now() - 3600000).toISOString() },
+  { id: 2, gratitude_text: "That my body still works. After the year I've had, every pain-free morning is a small miracle.", author_name: null, category: "Health & Body", timestamp: new Date(Date.now() - 7200000).toISOString() },
+  { id: 3, gratitude_text: "The fog over the bay at 6am. I moved to California six months ago and it still stops me in my tracks.", author_name: "Renata L.", category: "Nature & Earth", timestamp: new Date(Date.now() - 14400000).toISOString() },
+  { id: 4, gratitude_text: "My dog waited at the door for me. He does it every single day and it never gets old.", author_name: "Daniel", category: "Pets & Animals", timestamp: new Date(Date.now() - 18000000).toISOString() },
+  { id: 5, gratitude_text: "A client I worked with three years ago called to say that the schedule change we implemented together saved her company during the pandemic. I didn't know. I needed to hear that today.", author_name: null, category: "Work & Purpose", timestamp: new Date(Date.now() - 86400000).toISOString() },
+  { id: 6, gratitude_text: "Good coffee. Dark roast. Made at home. This morning it tasted exactly right.", author_name: "Priya S.", category: "Everyday Moments", timestamp: new Date(Date.now() - 90000000).toISOString() },
+  { id: 7, gratitude_text: "The conversation I had with a stranger at the airport last week. We talked for two hours about everything and I'll never see them again but I keep thinking about it.", author_name: "James", category: "Love & Connection", timestamp: new Date(Date.now() - 172800000).toISOString() },
+  { id: 8, gratitude_text: "Finally understanding something I've been confused about for years. That moment of clarity is its own kind of joy.", author_name: null, category: "Growth & Learning", timestamp: new Date(Date.now() - 259200000).toISOString() },
+  { id: 9, gratitude_text: "My mother is still alive. Every phone call with her now is a gift I don't take for granted.", author_name: "Sofia K.", category: "Family & Friends", timestamp: new Date(Date.now() - 345600000).toISOString() },
+  { id: 10, gratitude_text: "Rain on the window while I worked. Everything outside soft and gray, everything inside warm and mine.", author_name: null, category: "Everyday Moments", timestamp: new Date(Date.now() - 432000000).toISOString() },
+];
+
+function updateCharCount() {
+  const txt = document.getElementById('gratitude-text').value;
+  document.getElementById('char-count').textContent = txt.length;
+}
+
+function setFilter(cat, el) {
+  activeFilter = cat;
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderEntries();
+}
+
+function toggleSort() {
+  sortNewest = !sortNewest;
+  document.getElementById('sort-label').textContent = sortNewest ? 'newest' : 'oldest';
+  renderEntries();
+}
+
+function formatDate(ts) {
+  const d = new Date(ts);
+  const now = new Date();
+  const diff = now - d;
+  if (diff < 60000) return 'just now';
+  if (diff < 3600000) return `${Math.floor(diff/60000)}m ago`;
+  if (diff < 86400000) return `${Math.floor(diff/3600000)}h ago`;
+  if (diff < 604800000) return `${Math.floor(diff/86400000)}d ago`;
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function renderEntries() {
+  const grid = document.getElementById('entries-grid');
+  const empty = document.getElementById('empty-state');
+  let entries = [...allEntries];
+
+  if (activeFilter !== 'all') {
+    entries = entries.filter(e => e.category === activeFilter);
+  }
+
+  entries.sort((a, b) => {
+    const diff = new Date(b.timestamp) - new Date(a.timestamp);
+    return sortNewest ? diff : -diff;
+  });
+
+  const filtered = activeFilter !== 'all' ? entries.length : allEntries.length;
+  document.getElementById('wall-title').textContent =
+    activeFilter === 'all' ? `The wall (${allEntries.length})` : `${activeFilter} (${filtered})`;
+
+  if (entries.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  grid.innerHTML = entries.map((e, i) => `
+    <div class="entry-card" style="animation-delay: ${Math.min(i * 0.04, 0.4)}s">
+      <div class="entry-quote-mark">"</div>
+      <p class="entry-text">${escapeHtml(e.gratitude_text)}</p>
+      <div class="entry-footer">
+        <span class="entry-author">${e.author_name ? escapeHtml(e.author_name) : 'anonymous'}</span>
+        <div class="entry-meta">
+          ${e.category ? `<span class="entry-category">${escapeHtml(e.category)}</span>` : ''}
+          <span class="entry-date">${formatDate(e.timestamp)}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function updateCounters() {
+  document.getElementById('count-total').textContent = allEntries.length;
+  const today = allEntries.filter(e => {
+    const d = new Date(e.timestamp);
+    const now = new Date();
+    return d.toDateString() === now.toDateString();
+  }).length;
+  document.getElementById('count-today').textContent = today;
+}
+
+async function loadEntries() {
+  document.getElementById('loading-state').style.display = 'block';
+  document.getElementById('entries-grid').innerHTML = '';
+
+  try {
+    const res = await fetch(`${GRATITUDE_ENDPOINT}`);
+    if (!res.ok) throw new Error('API not ready');
+    const data = await res.json();
+    allEntries = data.entries || DEMO_ENTRIES;
+  } catch (e) {
+    allEntries = DEMO_ENTRIES;
+  }
+
+  document.getElementById('loading-state').style.display = 'none';
+  renderEntries();
+  updateCounters();
+}
+
+async function categorize(text) {
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 50,
+        system: `Categorize the following gratitude entry into exactly one of these categories:
+Family & Friends, Health & Body, Nature & Earth, Work & Purpose, Everyday Moments, Pets & Animals, Growth & Learning, Love & Connection.
+Return ONLY the category name, nothing else.`,
+        messages: [{ role: 'user', content: text }]
+      })
+    });
+    const data = await res.json();
+    return data.content?.[0]?.text?.trim() || 'Everyday Moments';
+  } catch (e) {
+    return 'Everyday Moments';
+  }
+}
+
+async function submitGratitude() {
+  const textEl = document.getElementById('gratitude-text');
+  const nameEl = document.getElementById('author-name');
+  const btn = document.getElementById('submit-btn');
+  const toast = document.getElementById('success-toast');
+
+  const text = textEl.value.trim();
+  const name = nameEl.value.trim();
+
+  if (!text) {
+    textEl.focus();
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Categorizing…';
+  toast.style.display = 'none';
+
+  const category = await categorize(text);
+
+  btn.textContent = 'Adding to the wall…';
+
+  const entry = {
+    gratitude_text: text,
+    author_name: name || null,
+    category: category,
+    timestamp: new Date().toISOString(),
+    id: Date.now()
+  };
+
+  try {
+    const res = await fetch(`${GRATITUDE_ENDPOINT}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(entry)
+    });
+    if (!res.ok) throw new Error('API error');
+  } catch (e) {
+    // Optimistic local add if API not yet wired
+  }
+
+  allEntries.unshift(entry);
+  renderEntries();
+  updateCounters();
+
+  textEl.value = '';
+  nameEl.value = '';
+  document.getElementById('char-count').textContent = '0';
+  toast.style.display = 'block';
+  setTimeout(() => { toast.style.display = 'none'; }, 5000);
+
+  btn.textContent = 'Add to the wall';
+  btn.disabled = false;
+
+  if (activeFilter !== 'all' && activeFilter !== category) {
+    setFilter('all', document.querySelector('.filter-chip'));
+  }
+}
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+loadEntries();
+</script>
+</body>
+</html>
