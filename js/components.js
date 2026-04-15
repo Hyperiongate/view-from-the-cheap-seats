@@ -29,12 +29,18 @@ function renderHeader(activePage) {
 
 // ----- Inject shared sidebar -----
 function renderSidebar() {
+  // NOTE: Verify this Substack URL works in your browser before deploying.
+  // Your project notes list: https://substack.com/@jimdillingham
+  // The subscribe page is typically: https://jimdillingham.substack.com/subscribe
+  // Use whichever actually resolves for you.
+  const substackUrl = 'https://jimdillingham.substack.com/subscribe';
+
   document.getElementById('sidebar').innerHTML = `
     <!-- Subscribe widget -->
     <div class="sidebar-widget">
       <h4>Get New Posts</h4>
       <p>Subscribe to get notified when a new post goes up. No spam, no fluff.</p>
-      <a href="https://jimdillingham.substack.com/subscribe" target="_blank" rel="noopener" class="btn btn-sm" style="display:block; text-align:center; margin-top:0.5rem;">Subscribe on Substack</a>
+      <a href="${substackUrl}" target="_blank" rel="noopener" class="btn btn-sm" style="display:block; text-align:center; margin-top:0.5rem;">Subscribe on Substack</a>
     </div>
 
     <!-- Facts & Fakes widget -->
@@ -115,7 +121,6 @@ async function submitComment(btn) {
   btn.textContent = 'Submitting...';
 
   try {
-    // Save to database
     const res = await fetch(`${COMMENTS_API}/comments`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -142,7 +147,6 @@ async function submitComment(btn) {
     btn.textContent = 'Comment Submitted';
     btn.disabled = false;
 
-    // Remove any previous success message
     const oldMsg = form.querySelector('.comment-success');
     if (oldMsg) oldMsg.remove();
 
@@ -179,7 +183,6 @@ async function loadComments(postSlug) {
   }
 }
 
-// Basic XSS protection for displayed comments
 function escapeHtml(str) {
   const div = document.createElement('div');
   div.textContent = str;
