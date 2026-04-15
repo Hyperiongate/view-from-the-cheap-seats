@@ -23,20 +23,26 @@
   </style>
 </head>
 <body>
-
   <header class="site-header" id="site-header"></header>
-
   <div class="site-wrapper">
     <div class="content-grid">
-
       <main>
         <h1 class="page-title">All Posts</h1>
         <p class="page-subtitle">Everything I've written, newest first.</p>
-
         <ul class="archive-list" id="archive-list">
 
           <!-- Add new posts here as they're published.
                Copy the <li> block below for each new post. -->
+
+          <li class="archive-item">
+            <span class="archive-date">Apr 15, 2026</span>
+            <div>
+              <div class="archive-title">
+                <a href="world-after-certainty.html">The World After Certainty</a>
+              </div>
+              <div class="archive-excerpt">What happens when uncertainty goes away? Not robots taking jobs. Not Skynet. Something quieter, and in some ways more profound.</div>
+            </div>
+          </li>
 
           <li class="archive-item">
             <span class="archive-date">Apr 14, 2026</span>
@@ -62,13 +68,10 @@
 
         </ul>
       </main>
-
       <aside class="sidebar" id="sidebar"></aside>
     </div>
   </div>
-
   <footer class="site-footer" id="site-footer"></footer>
-
   <script src="js/components.js"></script>
   <script>
     renderHeader('All Posts');
