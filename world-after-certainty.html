@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The World After Certainty — View from the Cheap Seats</title>
+  <meta name="description" content="What happens when uncertainty goes away? Not robots taking jobs. Not Skynet. Something quieter, and in some ways more profound." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="site-header" id="site-header"></header>
+
+  <div class="site-wrapper">
+    <div class="content-grid">
+
+      <main>
+        <article class="post-card">
+
+          <div class="post-meta">
+            <span class="post-date">April 15, 2026</span>
+            <span class="post-tag">Technology &amp; Society</span>
+          </div>
+
+          <h1 class="post-title">The World After Certainty</h1>
+
+          <!-- ===================== POST CONTENT START ===================== -->
+          <div class="post-body">
+
+            <p>I want to talk about something that doesn't get enough airtime in the AI conversation. Not robots taking jobs. Not Skynet. Something quieter, and in some ways more profound.</p>
+
+            <p>What happens when uncertainty goes away?</p>
+
+            <p>The first time I rode in a self-driving car, my hands gripped the door handle. Nobody in the front seat. The car pulled into traffic and I held my breath. Half a block later, I let go. By the end of the ride, I trusted it more than I trusted most human drivers. I had adapted — intellectually, emotionally — in about ninety seconds.</p>
+
+            <p>That capacity to adapt is going to matter, because what's coming isn't just automation. It's something closer to omniscience.</p>
+
+            <p>Imagine this.</p>
+
+            <p>It's 10:47 in the morning. Somewhere in Southeast Asia, a typhoon that hasn't formed yet is about to form. A sensor array picks up the pressure differential. Simultaneously, the AI is watching commodity futures in Rotterdam, a currency exchange in Zurich, a legislative committee vote in Washington, and a factory output report in Shenzhen that hasn't been made public yet — but the supply chain signals already told the story three days ago.</p>
+
+            <p>The butterfly flaps its wings.</p>
+
+            <p>In the time it takes you to read this sentence, the AI has traced the cascade: the typhoon delays a shipment, the shipment delay tightens copper supply, tight copper raises construction costs, rising construction costs in Phoenix suppress new housing starts, suppressed housing starts shift demand toward existing inventory, and existing inventory in three specific zip codes is about to get more expensive.</p>
+
+            <p>It also knows — not guesses, but knows, because it holds the information advantage nobody else has yet — that Tesla, for seventeen interconnected reasons having nothing to do with Tesla specifically, is about to rise.</p>
+
+            <p>Buy at 10:52. Sell at 11:22.</p>
+
+            <p>This isn't science fiction. It's an endpoint — a place we are heading as AI and quantum computing converge toward something approaching perfect information at perfect speed. In that world, the stock market isn't a market anymore. It's a settlement process. Sports betting isn't gambling. It's just arithmetic. And the economy we built on risk, uncertainty, and the gap between what you know and what I know — that economy has a different name now.</p>
+
+            <p>We just haven't decided what to call it yet.</p>
+
+            <p>Sufficiently advanced AI paired with quantum computing will systematically reduce uncertainty in domains we've always treated as fundamentally unknowable. Medical outcomes. The next play in a football game. Not through guesswork, but through near-perfect information processing at speeds we can't imagine. The variables are all there. We just couldn't hold them all at once. Soon, something can.</p>
+
+            <p>This reshapes everything.</p>
+
+            <p>Economic theory as we know it — supply, demand, risk, price discovery — is built on imperfect information and scarcity. Some economists would argue that uncertainty itself has value: it's why options markets exist, why entrepreneurship happens, why anyone bets on an unknown. When a machine can see where every market is heading, what does investing mean? When automation eliminates whole categories of work, what does income mean? Universal basic income sounds tidy until you ask: where does it come from, and what do people do with themselves when contribution is optional?</p>
+
+            <p>These aren't doomsday questions. They're design questions. Questions we should be asking now, before the answers are made for us.</p>
+
+            <p>The Darwinian lens is interesting here. Biological evolution is slow — wings and longer legs take millennia. But intellectual evolution? We're fast. Remarkably fast. The question isn't whether we can adapt to a world of near-perfect certainty. We probably can.</p>
+
+            <blockquote>The question is whether we've thought about what we're trading away when we get there. Because some things we've always called problems — the gap between what you know and what I know — were also the engine of a lot of things we value. Ambition. Surprise. The possibility of being wrong, and correcting it.</blockquote>
+
+            <p>I don't know how this ends. But I know we're heading there faster than we're thinking about it. And the view from the cheap seats is that the people who should be asking these questions are mostly still arguing about whether AI is going to take their job.</p>
+
+            <p>It's a reasonable thing to worry about. It's just not the most interesting part.</p>
+
+          </div>
+          <!-- ===================== POST CONTENT END ===================== -->
+
+          <div class="ai-badge mt-3">
+            <span class="ai-icon">🤖</span>
+            <span>This post was reviewed by the Swarm AI panel before publishing. The arguments were stress-tested across multiple AI systems for logical consistency and blind spots. All conclusions are Jim's.</span>
+          </div>
+
+          <div class="comments-section">
+            <h3>Join the conversation</h3>
+            <p class="comments-note">You don't have to agree with me. You just have to be civil. I read everything.</p>
+
+            <div class="comment-form">
+              <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+              <textarea placeholder="Your thoughts..."></textarea>
+              <input type="text" placeholder="Your name" />
+              <input type="email" placeholder="Email (not published)" />
+              <button class="btn">Post Comment</button>
+            </div>
+
+            <div id="comments-list" style="margin-top:2rem;"></div>
+          </div>
+
+        </article>
+
+        <div style="display:flex; justify-content:space-between; padding: 1rem 0; font-size:0.85rem;">
+          <a href="this-just-in.html" style="color:var(--muted);">← Previous post</a>
+          <a href="archive.html" style="color:var(--muted);">All posts →</a>
+        </div>
+
+      </main>
+
+      <aside class="sidebar" id="sidebar"></aside>
+    </div>
+  </div>
+
+  <footer class="site-footer" id="site-footer"></footer>
+
+  <script src="js/components.js"></script>
+  <script>
+    renderHeader('');
+    renderSidebar();
+    renderFooter();
+    loadComments('world-after-certainty');
+    document.addEventListener('click', function(e) {
+      if (e.target && e.target.classList.contains('btn') && e.target.closest('.comment-form')) {
+        submitComment(e.target);
+      }
+    });
+  </script>
+</body>
+</html>
