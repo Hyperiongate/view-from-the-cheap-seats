@@ -3,6 +3,17 @@
    Shared header, nav, sidebar, footer
    ============================================ */
 
+// ----- Inject favicon if not already present -----
+(function() {
+  if (!document.querySelector('link[rel="icon"]')) {
+    const link = document.createElement('link');
+    link.rel = 'icon';
+    link.type = 'image/x-icon';
+    link.href = 'favicon.ico';
+    document.head.appendChild(link);
+  }
+})();
+
 // ----- Inject shared header -----
 function renderHeader(activePage) {
   const nav = [
