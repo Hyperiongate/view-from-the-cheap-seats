@@ -41,13 +41,7 @@ function renderHeader(activePage) {
 // ----- Inject shared sidebar -----
 function renderSidebar() {
   document.getElementById('sidebar').innerHTML = `
-    <!-- Subscribe widget -->
-    <div class="sidebar-widget">
-      <h4>Get New Posts</h4>
-      <p>Subscribe to get notified when a new post goes up. No spam, no fluff.</p>
-      <a href="https://jimdillingham.substack.com/subscribe" target="_blank" rel="noopener" class="btn btn-sm" style="display:block; text-align:center; margin-top:0.5rem;">Subscribe on Substack</a>
-    </div>
-
+   
     <!-- World Gratitude List widget -->
     <div class="sidebar-widget">
       <h4>World Gratitude List</h4>
@@ -58,15 +52,7 @@ function renderSidebar() {
       </a>
     </div>
 
-    <!-- Facts & Fakes widget -->
-    <div class="sidebar-widget">
-      <h4>Fact-Check It</h4>
-      <a href="https://factsandfakes.ai" target="_blank" rel="noopener" class="sidebar-link">
-        <span class="icon">🔍</span>
-        Facts &amp; Fakes AI — paste any news article and check the claims
-      </a>
-    </div>
-
+    
     <!-- Learn Something New widget -->
     <div class="sidebar-widget">
       <h4>Learn Something New</h4>
