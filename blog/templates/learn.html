@@ -1,0 +1,293 @@
+{#- ===========================================================================
+    templates/learn.html — Learn Something New (a random AI lesson)
+    CHANGE NOTES
+      2026-09-30  Site rebuild. Same look and same lesson prompt as the old
+                  learn-something-new.html. The AI call now happens on the
+                  server (/api/lesson) using the ANTHROPIC_API_KEY setting —
+                  the old page called the AI straight from the browser with
+                  no key, so it could not work. Lesson text is inserted as
+                  plain text (safer). Rate-limited per visitor and per day.
+=========================================================================== -#}
+{% extends "base.html" %}
+{% set page_title = "Learn Something New" %}
+{% set description = "A random five-minute lesson powered by AI. Learn something you didn't know yesterday." %}
+
+{% block head %}
+  <style>
+    /* Page-specific overrides */
+    .lesson-wrapper {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .lesson-intro {
+      text-align: center;
+      padding: 2.5rem 0 2rem;
+    }
+
+    .lesson-intro p {
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.75);
+      font-style: italic;
+      line-height: 1.7;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .generate-btn {
+      display: block;
+      margin: 0 auto 2.5rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 2.4rem;
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .generate-btn:hover { background: var(--accent-dark); }
+    .generate-btn:active { transform: scale(0.98); }
+    .generate-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+    .lesson-divider {
+      width: 100%;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      margin-bottom: 2.5rem;
+    }
+
+    /* States */
+    .state-idle {
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    .state-idle p {
+      font-size: 1rem;
+      font-style: italic;
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.7;
+    }
+
+    .state-loading {
+      display: none;
+      text-align: center;
+      padding: 3rem 0;
+    }
+
+    .loading-label {
+      font-size: 0.75rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 400;
+      margin-bottom: 1.2rem;
+    }
+
+    .loading-bar {
+      width: 160px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.2);
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loading-bar::after {
+      content: '';
+      position: absolute;
+      left: -60%;
+      width: 60%;
+      height: 100%;
+      background: var(--accent);
+      animation: sweep 1.2s ease-in-out infinite;
+    }
+
+    @keyframes sweep {
+      0% { left: -60%; }
+      100% { left: 110%; }
+    }
+
+    /* Lesson card */
+    .lesson-card {
+      display: none;
+      animation: fadeUp 0.45s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lesson-meta {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .lesson-category {
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .lesson-readtime {
+      font-size: 0.75rem;
+      font-style: italic;
+      color: var(--muted);
+    }
+
+    .lesson-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .lesson-body {
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .lesson-body p {
+      margin-bottom: 1.25rem;
+    }
+
+    .lesson-takeaway {
+      margin-top: 2rem;
+      padding: 1rem 1.25rem;
+      border-left: 3px solid var(--accent);
+      background: #faf8f4;
+      font-size: 0.95rem;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .error-msg {
+      display: none;
+      text-align: center;
+      padding: 2rem 0;
+      font-style: italic;
+      color: #ff9a8b;
+      font-size: 0.95rem;
+    }
+
+    /* Fix: page title against dark starfield */
+    .page-title {
+      color: #ffffff;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+        <div class="lesson-wrapper">
+
+          <h1 class="page-title" style="text-align:center;">Learn Something New</h1>
+          <div class="lesson-intro">
+            <p>Every lesson is different. Every lesson is real. Press the button — you'll know something you didn't know two minutes ago.</p>
+          </div>
+
+          <button class="generate-btn" id="btnGenerate" type="button"{% if not ai_on %} disabled{% endif %}>
+            Teach me something
+          </button>
+
+          <div class="lesson-divider"></div>
+
+          <div class="state-idle" id="stateIdle">
+            <p>{% if ai_on %}Your next lesson is one click away.{% else %}Lessons are taking a short break. Check back soon.{% endif %}</p>
+          </div>
+
+          <div class="state-loading" id="stateLoading">
+            <p class="loading-label">Finding something interesting&hellip;</p>
+            <div class="loading-bar"></div>
+          </div>
+
+          <div class="error-msg" id="errorMsg">
+            Something went wrong. Give it another shot in a moment.
+          </div>
+
+          <div class="lesson-card" id="lessonCard">
+            <div class="post-card">
+              <div class="lesson-meta">
+                <span class="lesson-category" id="lessonCategory"></span>
+                <span class="lesson-readtime">~3 minute read</span>
+              </div>
+              <h2 class="lesson-title" id="lessonTitle"></h2>
+              <div class="lesson-body" id="lessonBody"></div>
+              <div class="lesson-takeaway" id="lessonTakeaway"></div>
+            </div>
+          </div>
+
+        </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    (function () {
+      var btn = document.getElementById('btnGenerate');
+      var idle = document.getElementById('stateIdle');
+      var loading = document.getElementById('stateLoading');
+      var lessonCard = document.getElementById('lessonCard');
+      var errorMsg = document.getElementById('errorMsg');
+
+      function fail(message) {
+        loading.style.display = 'none';
+        errorMsg.textContent = message || 'Something went wrong. Give it another shot in a moment.';
+        errorMsg.style.display = 'block';
+        btn.textContent = 'Teach me something';
+        btn.disabled = false;
+      }
+
+      btn.addEventListener('click', function () {
+        btn.disabled = true;
+        btn.textContent = 'Finding a topic…';
+        idle.style.display = 'none';
+        lessonCard.style.display = 'none';
+        errorMsg.style.display = 'none';
+        loading.style.display = 'block';
+
+        fetch('/api/lesson', { method: 'POST' })
+          .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+          .then(function (res) {
+            if (!res.ok || !res.data.ok) { fail(res.data.error); return; }
+            var lesson = res.data.lesson;
+            document.getElementById('lessonCategory').textContent = lesson.category;
+            document.getElementById('lessonTitle').textContent = lesson.title;
+            var body = document.getElementById('lessonBody');
+            body.innerHTML = '';
+            lesson.paragraphs.forEach(function (text) {
+              var p = document.createElement('p');
+              p.textContent = text;
+              body.appendChild(p);
+            });
+            document.getElementById('lessonTakeaway').textContent = lesson.takeaway;
+            loading.style.display = 'none';
+            lessonCard.style.display = 'block';
+            btn.textContent = 'Teach me something else';
+            btn.disabled = false;
+          })
+          .catch(function (err) {
+            console.error('Lesson generation failed:', err);
+            fail();
+          });
+      });
+    })();
+  </script>
+{% endblock %}
+{#- I did no harm and this file is not truncated. -#}

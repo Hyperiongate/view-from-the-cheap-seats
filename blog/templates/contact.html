@@ -1,0 +1,26 @@
+{#- ===========================================================================
+    templates/contact.html — Contact page
+    CHANGE NOTES
+      2026-09-30  Created for the site rebuild. Per Jim (2026-09-30): a plain
+                  email link instead of the old Formspree form. The address
+                  comes from CONTACT_EMAIL in blog/config.py.
+=========================================================================== -#}
+{% extends "base.html" %}
+{% set page_title = "Contact" %}
+{% set description = "Get in touch with James Dillingham. Questions, feedback, or disagreements welcome." %}
+
+{% block content %}
+<div class="post-card">
+  <h1 class="page-title">Get in Touch</h1>
+  <p class="page-subtitle">I read everything. I can't promise I'll respond to everything, but I read it.</p>
+  {%- if page and page.body_html.strip() %}
+  <div class="post-body">{{ page.body_html | safe }}</div>
+  {%- endif %}
+  <p class="contact-email">
+    <span class="contact-label">Email</span>
+    <a href="mailto:{{ cfg.CONTACT_EMAIL }}">{{ cfg.CONTACT_EMAIL }}</a>
+  </p>
+  <p class="widget-note">Say what's on your mind. You don't have to agree with me.</p>
+</div>
+{% endblock %}
+{#- I did no harm and this file is not truncated. -#}

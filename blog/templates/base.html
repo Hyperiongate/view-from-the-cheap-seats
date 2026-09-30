@@ -1,0 +1,150 @@
+{#- ===========================================================================
+    templates/base.html — shared frame for every page: header, sidebar, footer
+    View from the Cheap Seats — jamesdillingham.com
+
+    CHANGE NOTES
+      2026-09-30  Created for the site rebuild. Replaces js/components.js,
+                  which drew the header/sidebar/footer in the browser. Now
+                  the server writes them into every page, so search engines
+                  see them and the "Recent posts" list is always current.
+                  Sidebar adds "Recent posts" (last 10) and "My other sites"
+                  (shift-work.com, mrcadabra.com); the Gratitude List,
+                  Learn Something New, Podcast and "How Posts Are Made"
+                  widgets are carried over unchanged. Nav adds the
+                  Gratitude List and fixes the Contact link (was broken).
+=========================================================================== -#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="{{ cfg.GOOGLE_SITE_VERIFICATION }}" />
+  {%- set full_title = (page_title ~ " — " ~ cfg.SITE_TITLE) if page_title else (cfg.SITE_TITLE ~ " — " ~ cfg.AUTHOR) %}
+  {%- set desc = description or cfg.SITE_DESCRIPTION %}
+  {%- set og_image = og_image or (cfg.BASE_URL ~ cfg.HERO_IMAGE) %}
+  <title>{{ full_title }}</title>
+  <meta name="description" content="{{ desc }}" />
+  <link rel="canonical" href="{{ canonical }}" />
+  <meta property="og:type" content="{{ og_type or 'website' }}" />
+  <meta property="og:title" content="{{ full_title }}" />
+  <meta property="og:description" content="{{ desc }}" />
+  <meta property="og:url" content="{{ canonical }}" />
+  <meta property="og:image" content="{{ og_image }}" />
+  <meta property="og:site_name" content="{{ cfg.SITE_TITLE }}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ full_title }}" />
+  <meta name="twitter:description" content="{{ desc }}" />
+  <meta name="twitter:image" content="{{ og_image }}" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate" type="application/rss+xml" title="{{ cfg.SITE_TITLE }}" href="/feed.xml" />
+  <link rel="stylesheet" href="/static/css/site.css?v=20260930" />
+  {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  <header class="site-header">
+    <div class="site-wrapper">
+      <a class="site-title" href="/">
+        {{ cfg.SITE_TITLE }}
+        <span>{{ cfg.SITE_TAGLINE }}</span>
+      </a>
+      <nav class="site-nav" aria-label="Main">
+        {%- for href, label in cfg.NAV %}
+        <a href="{{ href }}" class="{{ 'active' if active == label else '' }}">{{ label }}</a>
+        {%- endfor %}
+      </nav>
+    </div>
+  </header>
+
+  {% block hero %}{% endblock %}
+
+  <div class="site-wrapper">
+    <div class="content-grid">
+      <main>
+        {% block content %}{% endblock %}
+      </main>
+
+      <aside class="sidebar">
+        {% block sidebar %}
+        <div class="sidebar-widget">
+          <h4>Recent Posts</h4>
+          {%- if recent_posts %}
+          <ul class="recent-list">
+            {%- for p in recent_posts %}
+            <li>
+              <a href="{{ p.url }}">{{ p.title }}</a>
+              <span class="recent-date">{{ p.date_short }}</span>
+            </li>
+            {%- endfor %}
+          </ul>
+          <a href="/archive.html" class="sidebar-more">All posts →</a>
+          {%- else %}
+          <p>First post coming soon.</p>
+          {%- endif %}
+        </div>
+
+        <div class="sidebar-widget">
+          <h4>My Other Sites</h4>
+          {%- for s in cfg.OTHER_SITES %}
+          <a href="{{ s.url }}" class="sidebar-link other-site" target="_blank" rel="noopener">
+            <span class="icon">{{ s.icon }}</span>
+            <span><strong>{{ s.name }}</strong><br><span class="other-blurb">{{ s.blurb }}</span></span>
+          </a>
+          {%- endfor %}
+        </div>
+
+        <!-- World Gratitude List widget -->
+        <div class="sidebar-widget">
+          <h4>World Gratitude List</h4>
+          <p>It's nearly impossible to be in a state of gratitude and a state of fear at the same time. Add yours.</p>
+          <a href="/gratitude.html" class="sidebar-link">
+            <span class="icon">🙏</span>
+            See what the world is grateful for today
+          </a>
+        </div>
+
+        <!-- Learn Something New widget -->
+        <div class="sidebar-widget">
+          <h4>Learn Something New</h4>
+          <a href="/learn-something-new.html" class="sidebar-link">
+            <span class="icon">💡</span>
+            A random lesson in under 5 minutes — powered by AI
+          </a>
+          <p class="mt-1 widget-note">Something different every time. Give it a click.</p>
+        </div>
+
+        <!-- Podcast widget -->
+        <div class="sidebar-widget">
+          <h4>The Podcast</h4>
+          <p class="sidebar-link" style="cursor:default; border-bottom:none; color:var(--muted);">
+            <span class="icon">🎙️</span>
+            Meat and the Machine — coming soon to Spotify
+          </p>
+          <p class="mt-1 widget-note">Real conversations between a human mind and an artificial one.</p>
+        </div>
+
+        <!-- AI methodology badge -->
+        <div class="sidebar-widget">
+          <h4>How Posts Are Made</h4>
+          <div class="ai-badge">
+            <span class="ai-icon">🤖</span>
+            <span>{{ cfg.AI_BADGE_SIDEBAR }}</span>
+          </div>
+        </div>
+        {% endblock %}
+      </aside>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="site-wrapper">
+      <span>© {{ now_year() }} {{ cfg.AUTHOR }} · {{ cfg.SITE_TITLE }}</span>
+      <span class="footer-note">Not for profit. Not for sale. Just my view. · <a href="/feed.xml">RSS</a></span>
+    </div>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>
+{#- I did no harm and this file is not truncated. -#}

@@ -1,0 +1,40 @@
+{#- ===========================================================================
+    templates/_post.html — one full post (used by the home page and post pages)
+    CHANGE NOTES
+      2026-09-30  Created for the site rebuild. Same layout as the old post
+                  pages; adds an optional photo (with photo credit) when the
+                  post file names an image.
+=========================================================================== -#}
+<article class="post-card">
+  <div class="post-meta">
+    <span class="post-date">{{ post.date_display }}</span>
+    {%- if post.tag %}
+    <span class="post-tag">{{ post.tag }}</span>
+    {%- endif %}
+  </div>
+
+  <h1 class="post-title">{% if link_title %}<a href="{{ post.url }}">{{ post.title }}</a>{% else %}{{ post.title }}{% endif %}</h1>
+
+  {%- if post.image %}
+  <figure class="post-image">
+    <img src="{{ post.image }}" alt="{{ post.image_alt }}" loading="lazy" />
+    {%- if post.image_credit %}
+    <figcaption>Photo: {% if post.image_credit_url %}<a href="{{ post.image_credit_url }}" target="_blank" rel="noopener">{{ post.image_credit }}</a>{% else %}{{ post.image_credit }}{% endif %}</figcaption>
+    {%- endif %}
+  </figure>
+  {%- endif %}
+
+  <div class="post-body">
+{{ post.body_html | safe }}
+  </div>
+
+  {%- if post.ai_reviewed %}
+  <div class="ai-badge mt-3">
+    <span class="ai-icon">🤖</span>
+    <span>{{ cfg.AI_BADGE_POST }}</span>
+  </div>
+  {%- endif %}
+
+  {% include "_comments.html" %}
+</article>
+{#- I did no harm and this file is not truncated. -#}

@@ -1,0 +1,22 @@
+{#- ===========================================================================
+    templates/post.html — a single post at /its-name.html
+    CHANGE NOTES
+      2026-09-30  Created for the site rebuild. Previous/next links are now
+                  worked out automatically from the post dates.
+=========================================================================== -#}
+{% extends "base.html" %}
+{% set page_title = post.title %}
+{% set description = post.description %}
+{% set og_type = "article" %}
+{% if post.image %}{% set og_image = (post.image if post.image.startswith("http") else cfg.BASE_URL ~ post.image) %}{% endif %}
+
+{% block content %}
+  {% include "_post.html" %}
+  <div class="post-nav">
+    {%- if older %}<a href="{{ older.url }}">← {{ older.title }}</a>{% else %}<a href="/">← Latest post</a>{% endif %}
+    {%- if newer %}<a href="{{ newer.url }}">{{ newer.title }} →</a>{% else %}<a href="/archive.html">All posts →</a>{% endif %}
+  </div>
+{% endblock %}
+
+{% block scripts %}<script src="/static/js/site.js?v=20260930"></script>{% endblock %}
+{#- I did no harm and this file is not truncated. -#}

@@ -1,0 +1,19 @@
+{#- ===========================================================================
+    templates/page.html — simple content pages (About) from /pages
+    CHANGE NOTES
+      2026-09-30  Created for the site rebuild. Text lives in pages/about.html.
+                  Content now sits on a white card so it is readable over
+                  the starfield background (old About text was hard to read).
+=========================================================================== -#}
+{% extends "base.html" %}
+{% set page_title = page.title if page.title != "About This Blog" else "About" %}
+{% set description = page.description %}
+
+{% block content %}
+<div class="post-card about-content">
+  <h1 class="page-title">{{ page.title }}</h1>
+  {%- if page.subtitle %}<p class="page-subtitle">{{ page.subtitle }}</p>{% endif %}
+{{ page.body_html | safe }}
+</div>
+{% endblock %}
+{#- I did no harm and this file is not truncated. -#}

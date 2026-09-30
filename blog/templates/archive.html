@@ -1,0 +1,31 @@
+{#- ===========================================================================
+    templates/archive.html — "All Posts": every post by title and date
+    CHANGE NOTES
+      2026-09-30  Created for the site rebuild. Built automatically from
+                  /posts, newest first — no more hand-editing this list.
+=========================================================================== -#}
+{% extends "base.html" %}
+{% set page_title = "All Posts" %}
+{% set description = "Every post from View from the Cheap Seats — AI, politics and the state of the world, from James Dillingham." %}
+
+{% block content %}
+<div class="post-card">
+  <h1 class="page-title">All Posts</h1>
+  <p class="page-subtitle">Everything I've written, newest first.</p>
+  <ul class="archive-list">
+    {%- for p in posts %}
+    <li class="archive-item">
+      <span class="archive-date">{{ p.date_short }}</span>
+      <div>
+        <div class="archive-title"><a href="{{ p.url }}">{{ p.title }}</a></div>
+        {%- if p.tag %}<span class="archive-tag">{{ p.tag }}</span>{% endif %}
+        <div class="archive-excerpt">{{ p.excerpt }}</div>
+      </div>
+    </li>
+    {%- else %}
+    <li class="archive-item"><span></span><div>No posts yet.</div></li>
+    {%- endfor %}
+  </ul>
+</div>
+{% endblock %}
+{#- I did no harm and this file is not truncated. -#}

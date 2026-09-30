@@ -1,0 +1,12 @@
+# =============================================================================
+# requirements.txt — Python packages Render installs for jamesdillingham.com
+# CHANGE NOTES
+#   2026-09-30  Created for the site rebuild (FastAPI web service).
+# =============================================================================
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+jinja2>=3.1,<4
+markdown>=3.6,<4
+httpx>=0.27,<1
+psycopg[binary]>=3.2,<4
+# I did no harm and this file is not truncated.

@@ -1,1 +1,7 @@
-
+# Local test files — never uploaded
+data/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env

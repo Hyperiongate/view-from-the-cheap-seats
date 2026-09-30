@@ -1,0 +1,139 @@
+{#- ===========================================================================
+    templates/admin.html — Jim's private moderation page at /admin
+    CHANGE NOTES
+      2026-09-30  Created for the site rebuild. Enter the ADMIN_KEY password
+                  (set in Render) to see recent comments, gratitude entries
+                  and gratitude comments. "Hide" removes an item from the site;
+                  "Restore" brings it back. Nothing is permanently deleted.
+                  The password is kept only in this browser tab.
+=========================================================================== -#}
+{% extends "base.html" %}
+{% set page_title = "Admin" %}
+
+{% block head %}<meta name="robots" content="noindex, nofollow" />{% endblock %}
+
+{% block content %}
+<div class="post-card">
+  <h1 class="page-title">Admin</h1>
+  <p class="page-subtitle">Hide anything that shouldn't be on the site. Hidden items can be restored.</p>
+
+  {%- if not admin_on %}
+  <p>The admin page is switched off. In Render, add a setting named <strong>ADMIN_KEY</strong> with a long password, then reload this page.</p>
+  {%- else %}
+  <form class="admin-login" id="login" autocomplete="off">
+    <label for="key">Admin password</label><br>
+    <input type="password" id="key" />
+    <button class="btn" type="submit">Open</button>
+    <p class="form-message" id="login-msg"></p>
+  </form>
+
+  <div id="panel" style="display:none;">
+    <p class="admin-meta" id="status"></p>
+    <div class="admin-tabs">
+      <button type="button" data-kind="comment" class="active">Post comments</button>
+      <button type="button" data-kind="gratitude">Gratitude entries</button>
+      <button type="button" data-kind="gratitude_comment">Gratitude comments</button>
+    </div>
+    <div id="items"></div>
+  </div>
+  {%- endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{%- if admin_on %}
+<script>
+(function () {
+  var key = '';
+  try { key = sessionStorage.getItem('vcs-admin') || ''; } catch (e) {}
+  var kind = 'comment';
+  var itemsEl = document.getElementById('items');
+
+  function api(path, opts) {
+    opts = opts || {};
+    opts.headers = Object.assign({ 'X-Admin-Key': key, 'Content-Type': 'application/json' }, opts.headers || {});
+    return fetch(path, opts).then(function (r) {
+      if (r.status === 401) throw new Error('Wrong password');
+      if (!r.ok) throw new Error('Error ' + r.status);
+      return r.json();
+    });
+  }
+
+  function text(tag, cls, value) {
+    var el = document.createElement(tag);
+    if (cls) el.className = cls;
+    el.textContent = value;
+    return el;
+  }
+
+  function render(items) {
+    itemsEl.innerHTML = '';
+    if (!items.length) { itemsEl.appendChild(text('p', 'widget-note', 'Nothing here yet.')); return; }
+    items.forEach(function (it) {
+      var row = document.createElement('div');
+      row.className = 'admin-item' + (it.hidden ? ' is-hidden' : '');
+      var left = document.createElement('div');
+      var meta = (it.created_at || '').replace('T', ' ').replace('Z', ' UTC') + ' · ' +
+        (it.name || 'anonymous') + (it.email ? ' <' + it.email + '>' : '') +
+        ' · ' + (kind === 'comment' ? 'post: ' : kind === 'gratitude' ? 'theme: ' : 'entry #') + (it.context || '') +
+        (it.hidden ? ' · HIDDEN' : '');
+      left.appendChild(text('div', 'admin-meta', meta));
+      left.appendChild(text('div', 'admin-body', it.body));
+      var btn = document.createElement('button');
+      btn.className = 'btn btn-sm';
+      btn.style.width = 'auto';
+      btn.type = 'button';
+      btn.textContent = it.hidden ? 'Restore' : 'Hide';
+      btn.addEventListener('click', function () {
+        btn.disabled = true;
+        api('/api/admin/hide', { method: 'POST', body: JSON.stringify({ kind: kind, id: it.id, hidden: !it.hidden }) })
+          .then(load).catch(function (e) { alert(e.message); btn.disabled = false; });
+      });
+      row.appendChild(left);
+      row.appendChild(btn);
+      itemsEl.appendChild(row);
+    });
+  }
+
+  function load() {
+    return api('/api/admin/items?kind=' + kind).then(function (d) { render(d.items); });
+  }
+
+  function open() {
+    return api('/api/admin/status').then(function (s) {
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('panel').style.display = 'block';
+      var st = s.posts + ' posts · database: ' + s.database + ' · AI: ' + (s.ai ? 'on' : 'off') +
+        ' · email alerts: ' + (s.email_notifications ? 'on' : 'off');
+      if (s.content_errors && s.content_errors.length) st += ' · POST FILE PROBLEMS: ' + s.content_errors.join(' | ');
+      document.getElementById('status').textContent = st;
+      return load();
+    });
+  }
+
+  document.getElementById('login').addEventListener('submit', function (e) {
+    e.preventDefault();
+    key = document.getElementById('key').value;
+    open().then(function () {
+      try { sessionStorage.setItem('vcs-admin', key); } catch (err) {}
+    }).catch(function (err) {
+      var m = document.getElementById('login-msg');
+      m.textContent = err.message; m.className = 'form-message err';
+    });
+  });
+
+  document.querySelectorAll('.admin-tabs button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      document.querySelectorAll('.admin-tabs button').forEach(function (x) { x.classList.remove('active'); });
+      b.classList.add('active');
+      kind = b.getAttribute('data-kind');
+      load().catch(function (e) { alert(e.message); });
+    });
+  });
+
+  if (key) open().catch(function () { key = ''; });
+})();
+</script>
+{%- endif %}
+{% endblock %}
+{#- I did no harm and this file is not truncated. -#}

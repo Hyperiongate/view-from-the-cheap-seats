@@ -1,0 +1,36 @@
+{#- ===========================================================================
+    templates/home.html — the front page: today's post, in full
+    CHANGE NOTES
+      2026-09-30  Created for the site rebuild. Always shows the newest post
+                  from /posts in full (the old home page showed a hand-copied
+                  excerpt that had to be edited for every new post).
+=========================================================================== -#}
+{% extends "base.html" %}
+
+{% block hero %}
+<div class="hero">
+  <img src="{{ cfg.HERO_IMAGE }}" alt="{{ cfg.HERO_ALT }}" />
+  <div class="hero-overlay"></div>
+  <div class="hero-text">
+    <h2>{{ cfg.HERO_QUOTE }}</h2>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+  {%- if post %}
+    {% set link_title = true %}
+    {% include "_post.html" %}
+    <div class="post-nav">
+      {%- if older %}<a href="{{ older.url }}">← Previous post: {{ older.title }}</a>{% else %}<span></span>{% endif %}
+      <a href="/archive.html">All posts →</a>
+    </div>
+  {%- else %}
+    <div class="post-card"><p>The first post is on its way.</p></div>
+  {%- endif %}
+{% endblock %}
+
+{% block scripts %}
+  {%- if post %}<script src="/static/js/site.js?v=20260930"></script>{% endif %}
+{% endblock %}
+{#- I did no harm and this file is not truncated. -#}
