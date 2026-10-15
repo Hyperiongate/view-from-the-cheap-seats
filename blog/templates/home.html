@@ -4,6 +4,7 @@
       2026-09-30  Created for the site rebuild. Always shows the newest post
                   from /posts in full (the old home page showed a hand-copied
                   excerpt that had to be edited for every new post).
+      2026-09-30  Comment script loads only when comments are switched on.
 =========================================================================== -#}
 {% extends "base.html" %}
 
@@ -31,6 +32,6 @@
 {% endblock %}
 
 {% block scripts %}
-  {%- if post %}<script src="/static/js/site.js?v=20260930"></script>{% endif %}
+  {%- if post and cfg.COMMENTS_ENABLED %}<script src="/static/js/site.js?v=20260930"></script>{% endif %}
 {% endblock %}
 {#- I did no harm and this file is not truncated. -#}

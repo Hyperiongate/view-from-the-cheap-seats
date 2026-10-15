@@ -5,6 +5,12 @@
 # CHANGE NOTES
 #   2026-09-30  Created for the site rebuild. Change the text or links here and
 #               every page picks it up (header, sidebar, footer, contact).
+#   2026-09-30  Per Jim: World Gratitude List switched OFF for now (set
+#               GRATITUDE_ENABLED = True to bring it back — all its code is
+#               kept). Contact email is jim@shift-work.com.
+#   2026-09-30  Per Jim: reader comments switched OFF too, so the site needs
+#               no database. COMMENTS_ENABLED = True brings them back (a
+#               DATABASE_URL must then be set on Render).
 # =============================================================================
 
 import os
@@ -17,7 +23,16 @@ SITE_DESCRIPTION = (
     "AI, politics and the state of the world — honest takes from James Dillingham. "
     "Not for profit. Just my view from the back of the arena."
 )
-CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "Jim@shift-work.com")
+CONTACT_EMAIL = os.environ.get("CONTACT_EMAIL", "jim@shift-work.com")
+
+# World Gratitude List: off for now (Jim, 2026-09-30). True brings it back.
+GRATITUDE_ENABLED = False
+
+# Reader comments under posts: off (Jim, 2026-09-30). True brings them back.
+COMMENTS_ENABLED = False
+
+# True when any feature that stores visitor submissions is switched on.
+NEEDS_DATABASE = GRATITUDE_ENABLED or COMMENTS_ENABLED
 GOOGLE_SITE_VERIFICATION = "Vd_8POebv0lcbvhSEV5AYalDpQ18gzSiXp9sEqXiRsU"
 
 HERO_IMAGE = "/static/img/hero.jpg"
@@ -27,7 +42,7 @@ HERO_QUOTE = "“The view is better from up here. You can see everything — inc
 NAV = [
     ("/", "Home"),
     ("/archive.html", "All Posts"),
-    ("/gratitude.html", "Gratitude List"),
+] + ([("/gratitude.html", "Gratitude List")] if GRATITUDE_ENABLED else []) + [
     ("/about.html", "About"),
     ("/contact.html", "Contact"),
 ]

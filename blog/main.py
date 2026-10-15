@@ -16,6 +16,15 @@
 #                 - runs the AI features server-side (gratitude themes,
 #                   Learn Something New, moderation)
 #                 - has a private /admin page to hide or restore anything.
+#   2026-09-30  Per Jim: World Gratitude List switched off for now via
+#               config.GRATITUDE_ENABLED. /gratitude.html sends visitors to
+#               the home page, the gratitude API answers "not found", and it
+#               is left out of the sitemap. All the code stays in place so
+#               it can be switched back on in one line.
+#   2026-09-30  Per Jim: reader comments switched off as well, so no
+#               database is needed. The database is only opened when
+#               config.NEEDS_DATABASE is true; the comments API answers
+#               "not found" while comments are off. Code kept for later.
 #
 # SETTINGS (Render dashboard → Environment)
 #   DATABASE_URL       Postgres "Internal Database URL" (required on Render)
@@ -56,9 +65,10 @@ templates.env.globals.update(cfg=config, now_year=lambda: _dt.date.today().year)
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    db.init_db()
+    if config.NEEDS_DATABASE:
+        db.init_db()
     posts = store.published_posts()
-    print(f"[startup] database: {'PostgreSQL' if db.USE_PG else 'local SQLite'}; "
+    print(f"[startup] database: {('PostgreSQL' if db.USE_PG else 'local SQLite') if config.NEEDS_DATABASE else 'not needed'}; "
           f"{len(posts)} published posts; AI {'on' if ai.enabled() else 'off'}; "
           f"admin {'on' if os.environ.get('ADMIN_KEY') else 'off (set ADMIN_KEY)'}")
     for err in store.errors:
@@ -152,6 +162,8 @@ def contact_redirect():
 
 @app.get("/gratitude.html", response_class=HTMLResponse)
 def gratitude(request: Request):
+    if not config.GRATITUDE_ENABLED:
+        return RedirectResponse("/", status_code=302)
     return render(request, "gratitude.html", active="Gratitude List",
                   categories=ai.GRATITUDE_CATEGORIES)
 
@@ -180,7 +192,7 @@ def sitemap():
             (f"{base}/archive.html", None, "weekly", "0.8"),
             (f"{base}/about.html", None, "monthly", "0.7"),
             (f"{base}/contact.html", None, "monthly", "0.5"),
-            (f"{base}/gratitude.html", None, "daily", "0.7"),
+            *([(f"{base}/gratitude.html", None, "daily", "0.7")] if config.GRATITUDE_ENABLED else []),
             (f"{base}/learn-something-new.html", None, "monthly", "0.6")]
     for p in store.published_posts():
         urls.append((base + p.url, p.date.isoformat(), "monthly", "0.9"))
@@ -261,13 +273,20 @@ class CommentIn(BaseModel):
     website: str = ""  # honeypot — real visitors never see or fill this
 
 
+def _comments_on() -> None:
+    if not config.COMMENTS_ENABLED:
+        raise HTTPException(404)
+
+
 @app.get("/api/comments/{slug}")
 def get_comments(slug: str):
+    _comments_on()
     return {"comments": db.list_comments(slug)}
 
 
 @app.post("/api/comments")
 def post_comment(data: CommentIn, request: Request, background: BackgroundTasks):
+    _comments_on()
     if data.website:
         return {"ok": True, "message": "Thanks — your comment is posted."}
     post = store.get_post(data.post_slug)
@@ -306,13 +325,20 @@ class GratitudeCommentIn(BaseModel):
     website: str = ""
 
 
+def _gratitude_on() -> None:
+    if not config.GRATITUDE_ENABLED:
+        raise HTTPException(404)
+
+
 @app.get("/api/gratitude")
 def get_gratitude():
+    _gratitude_on()
     return {"entries": db.list_gratitude()}
 
 
 @app.post("/api/gratitude")
 def post_gratitude(data: GratitudeIn, request: Request, background: BackgroundTasks):
+    _gratitude_on()
     if data.website:
         return {"ok": True}
     ip_hash = moderation.visitor_hash(client_ip(request))
@@ -332,6 +358,7 @@ def post_gratitude(data: GratitudeIn, request: Request, background: BackgroundTa
 @app.post("/api/gratitude/{gratitude_id}/comments")
 def post_gratitude_comment(gratitude_id: int, data: GratitudeCommentIn, request: Request,
                            background: BackgroundTasks):
+    _gratitude_on()
     if data.website:
         return {"ok": True}
     if not db.gratitude_exists(gratitude_id):

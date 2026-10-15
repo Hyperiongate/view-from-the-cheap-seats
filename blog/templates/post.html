@@ -3,6 +3,7 @@
     CHANGE NOTES
       2026-09-30  Created for the site rebuild. Previous/next links are now
                   worked out automatically from the post dates.
+      2026-09-30  Comment script loads only when comments are switched on.
 =========================================================================== -#}
 {% extends "base.html" %}
 {% set page_title = post.title %}
@@ -18,5 +19,5 @@
   </div>
 {% endblock %}
 
-{% block scripts %}<script src="/static/js/site.js?v=20260930"></script>{% endblock %}
+{% block scripts %}{% if cfg.COMMENTS_ENABLED %}<script src="/static/js/site.js?v=20260930"></script>{% endif %}{% endblock %}
 {#- I did no harm and this file is not truncated. -#}

@@ -12,6 +12,8 @@
                   Learn Something New, Podcast and "How Posts Are Made"
                   widgets are carried over unchanged. Nav adds the
                   Gratitude List and fixes the Contact link (was broken).
+      2026-09-30  Gratitude List widget shows only when GRATITUDE_ENABLED
+                  is on in blog/config.py (switched off for now).
 =========================================================================== -#}
 <!DOCTYPE html>
 <html lang="en">
@@ -94,6 +96,7 @@
           {%- endfor %}
         </div>
 
+        {%- if cfg.GRATITUDE_ENABLED %}
         <!-- World Gratitude List widget -->
         <div class="sidebar-widget">
           <h4>World Gratitude List</h4>
@@ -103,6 +106,7 @@
             See what the world is grateful for today
           </a>
         </div>
+        {%- endif %}
 
         <!-- Learn Something New widget -->
         <div class="sidebar-widget">

@@ -4,6 +4,7 @@
       2026-09-30  Created for the site rebuild. Same layout as the old post
                   pages; adds an optional photo (with photo credit) when the
                   post file names an image.
+      2026-09-30  Comment box shows only when COMMENTS_ENABLED is on.
 =========================================================================== -#}
 <article class="post-card">
   <div class="post-meta">
@@ -35,6 +36,8 @@
   </div>
   {%- endif %}
 
+  {%- if cfg.COMMENTS_ENABLED %}
   {% include "_comments.html" %}
+  {%- endif %}
 </article>
 {#- I did no harm and this file is not truncated. -#}

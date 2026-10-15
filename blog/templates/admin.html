@@ -6,6 +6,9 @@
                   and gratitude comments. "Hide" removes an item from the site;
                   "Restore" brings it back. Nothing is permanently deleted.
                   The password is kept only in this browser tab.
+      2026-09-30  Gratitude tabs show only when the Gratitude List is on.
+      2026-09-30  With comments and the Gratitude List both off there is
+                  nothing to moderate, so the page just says so.
 =========================================================================== -#}
 {% extends "base.html" %}
 {% set page_title = "Admin" %}
@@ -17,7 +20,9 @@
   <h1 class="page-title">Admin</h1>
   <p class="page-subtitle">Hide anything that shouldn't be on the site. Hidden items can be restored.</p>
 
-  {%- if not admin_on %}
+  {%- if not cfg.NEEDS_DATABASE %}
+  <p>Comments and the Gratitude List are switched off, so there's nothing to moderate. They can be turned back on in <strong>blog/config.py</strong>.</p>
+  {%- elif not admin_on %}
   <p>The admin page is switched off. In Render, add a setting named <strong>ADMIN_KEY</strong> with a long password, then reload this page.</p>
   {%- else %}
   <form class="admin-login" id="login" autocomplete="off">
@@ -31,8 +36,10 @@
     <p class="admin-meta" id="status"></p>
     <div class="admin-tabs">
       <button type="button" data-kind="comment" class="active">Post comments</button>
+      {%- if cfg.GRATITUDE_ENABLED %}
       <button type="button" data-kind="gratitude">Gratitude entries</button>
       <button type="button" data-kind="gratitude_comment">Gratitude comments</button>
+      {%- endif %}
     </div>
     <div id="items"></div>
   </div>
@@ -41,7 +48,7 @@
 {% endblock %}
 
 {% block scripts %}
-{%- if admin_on %}
+{%- if admin_on and cfg.NEEDS_DATABASE %}
 <script>
 (function () {
   var key = '';
